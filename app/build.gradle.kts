@@ -84,7 +84,6 @@ dependencies {
     val retrofitVersion by extra("2.9.0")
     val okhttpVersion by extra("4.5.0")
     val roomVersion by extra("2.3.0")
-    val threetenabpVersion by extra("1.2.4")
 
     //OKHTTP
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
