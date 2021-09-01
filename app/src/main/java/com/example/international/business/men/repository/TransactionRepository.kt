@@ -9,8 +9,4 @@ interface TransactionRepository {
     fun getTransactionsBySku(sku: String, list: List<TransactionItem>?): List<TransactionItem>?
     fun getSkuTransactionsAmountSum(list: List<TransactionItem>?): Double
     fun convertAmount(amount: Double, currency: String): Double
-
-    suspend fun persistProductList(list: List<TransactionItem>?)
-    suspend fun fetchProductList(): List<ProductEntity>
-
 }

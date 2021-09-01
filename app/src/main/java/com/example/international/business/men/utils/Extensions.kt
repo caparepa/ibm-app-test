@@ -250,3 +250,7 @@ fun View.makeVisible() {
 fun View.makeGone() {
     visibility = View.GONE
 }
+
+/**
+ * Math functions
+ */

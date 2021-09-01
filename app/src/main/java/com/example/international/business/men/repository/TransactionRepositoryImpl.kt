@@ -15,7 +15,6 @@ class TransactionRepositoryImpl(val productDao: ProductDao) : TransactionReposit
     override suspend fun getTransactionList(): List<TransactionItem>? = withContext(Dispatchers.IO) {
         val response = api.getTransactionList()
         val list = response.body()
-        persistProductList(list)
         list
     }
 
@@ -29,18 +28,5 @@ class TransactionRepositoryImpl(val productDao: ProductDao) : TransactionReposit
 
     override fun convertAmount(amount: Double, currency: String): Double {
         TODO("Not yet implemented")
-    }
-
-    override suspend fun persistProductList(list: List<TransactionItem>?) {
-        list?.forEach { item ->
-            val entity = ProductEntity(
-                sku = item.sku
-            )
-            productDao.update(entity)
-        }
-    }
-
-    override suspend fun fetchProductList(): List<ProductEntity> = withContext(Dispatchers.IO) {
-        productDao.getProductList()
     }
 }

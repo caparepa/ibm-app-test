@@ -16,26 +16,6 @@ class ExchangeRateRepositoryImpl(val exchangeRateDao: ExchangeRateDao) : Exchang
     override suspend fun getExchangeRates(): List<ExchangeRateItem>? = withContext(Dispatchers.IO){
         val response = api.getExchangeRates()
         val list = response.body()
-        persistExchangeRate(list)
         list
-    }
-
-    override suspend fun persistExchangeRate(list: List<ExchangeRateItem>?): Unit = withContext(Dispatchers.IO) {
-        list?.forEach { item ->
-            val entity = ExchangeRateEntity(
-                from = item.from,
-                to = item.to,
-                rate = item.rate
-            )
-            exchangeRateDao.upsert(entity)
-        }
-    }
-
-    override suspend fun fetchExchangeRates(): List<ExchangeRateEntity> = withContext(Dispatchers.IO) {
-        exchangeRateDao.getAllRates()
-    }
-
-    override suspend fun fetchEuroRate(currency: String): ExchangeRateEntity? = withContext(Dispatchers.IO) {
-        exchangeRateDao.getEuroRateByCurrency(currency)
     }
 }
