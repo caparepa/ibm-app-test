@@ -8,6 +8,7 @@ interface ExchangeRateRepository {
     suspend fun getExchangeRates(): List<ExchangeRateItem>?
     suspend fun persistExchangeRate(list: List<ExchangeRateItem>?)
 
-    suspend fun fetchExchangeRates(): List<ExchangeRateEntity>
+    suspend fun fetchExchangeRates(): List<ExchangeRateEntity>?
+    suspend fun fetchEuroRate(currency: String): ExchangeRateEntity?
 
 }

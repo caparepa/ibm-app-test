@@ -21,4 +21,10 @@ interface ExchangeRateDao {
             update(rate)
         }
     }
+
+    @Query("SELECT * FROM exchange_rates WHERE `from` = :currency AND `to` = \"EUR\"")
+    suspend fun getEuroRateByCurrency(currency: String?): ExchangeRateEntity
+
+    @Query("SELECT * FROM exchange_rates")
+    suspend fun getAllRates(): List<ExchangeRateEntity>
 }

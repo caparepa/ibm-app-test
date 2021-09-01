@@ -21,4 +21,7 @@ interface ProductDao {
             update(product)
         }
     }
+
+    @Query("SELECT * FROM products")
+    suspend fun getProductList(): List<ProductEntity>?
 }
