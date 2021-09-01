@@ -1,7 +1,8 @@
-package com.example.international.business.men
+package com.example.international.business.men.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.international.business.men.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

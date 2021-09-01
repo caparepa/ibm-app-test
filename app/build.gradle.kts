@@ -21,11 +21,11 @@ android {
 
     buildTypes {
         getByName("debug") {
-            buildConfigField("String", "BASE_URL", "\"https://hn.algolia.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://quiet-stone-2094.herokuapp.com\"")
         }
 
         getByName("release") {
-            buildConfigField("String", "BASE_URL", "\"https://hn.algolia.com")
+            buildConfigField("String", "BASE_URL", "\"https://quiet-stone-2094.herokuapp.com\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
