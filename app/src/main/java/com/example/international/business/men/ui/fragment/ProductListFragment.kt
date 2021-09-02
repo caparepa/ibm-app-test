@@ -53,13 +53,15 @@ class ProductListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //setUpViews(false)
+        setUpViews(false)
         loadProductList()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        productTransactionViewModel.transactionList.postValue(null)
+        productTransactionViewModel.productList.postValue(null)
         requireActivity().viewModelStore.clear()
     }
 
@@ -85,7 +87,6 @@ class ProductListFragment : Fragment() {
         productList.observe(viewLifecycleOwner, Observer {
             setUpViews(true)
             if (!it.isNullOrEmpty()) {
-                //requireActivity().toastLong("PROD - HAY DATA!")
                 setUpProductListAdapter(it)
             } else {
                 requireActivity().toastLong("PROD - NO HAY DATA!")
