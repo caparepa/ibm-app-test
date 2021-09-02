@@ -6,13 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.international.business.men.R
+import com.example.international.business.men.databinding.FragmentTransactionListBinding
+import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.core.component.KoinComponent
 
 /**
  * A simple [Fragment] subclass.
  * Use the [TransactionListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TransactionListFragment : Fragment() {
+class TransactionListFragment : Fragment(), KoinComponent {
+
+    private val productTransactionViewModel: ProductTransactionViewModel by sharedViewModel()
+
+    private var binding : FragmentTransactionListBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +31,13 @@ class TransactionListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_transaction_list, container, false)
+        //observeViewModel()
+        binding = FragmentTransactionListBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        //runViewModel()
+    }
 }
