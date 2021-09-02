@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.databinding.FragmentTransactionListBinding
 import com.example.international.business.men.ui.adapter.base.DynamicAdapter
@@ -31,8 +32,10 @@ class TransactionListFragment : Fragment(), KoinComponent {
     private val binding get() = _binding!!
 
     private var sku: String? = null
-    private var allTransactionList: List<TransactionItem>? = null
     private var totalAmount: String? = null
+
+    private var allTransactionList: List<TransactionItem>? = null
+    private var exchangeRatelist: List<ExchangeRateItem>? = null
 
     private var transactionAdapter: DynamicAdapter? = null
 
@@ -124,10 +127,10 @@ class TransactionListFragment : Fragment(), KoinComponent {
         val amountEuro = item.model.amount
         when (action) {
             "no_action" -> {
-                requireActivity().toastLong("Amount - $currency $amountOriginal / EUR $amountEuro")
+                requireActivity().toastLong("Amount - $currency $amountOriginal | EUR $amountEuro")
             }
             else -> {
-                requireActivity().toastLong("NO ACTION")
+                requireActivity().toastLong("NO OTHER ACTION")
             }
         }
     }
