@@ -5,9 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.international.business.men.R
+import androidx.lifecycle.Observer
 import com.example.international.business.men.databinding.FragmentProductListBinding
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
+import com.example.international.business.men.utils.toastLong
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
@@ -30,13 +31,46 @@ class ProductListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        //observerViewModel()
+        observeViewModel()
         binding = FragmentProductListBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
     override fun onResume() {
         super.onResume()
-        //runViewModel()
+        loadProductList()
     }
+
+    private fun loadProductList() {
+        productTransactionViewModel.getExchangeRateList()
+        productTransactionViewModel.getTransactionList()
+    }
+
+    private fun observeViewModel() = productTransactionViewModel.run {
+        loadingState.observe(viewLifecycleOwner, Observer {
+
+        })
+        productList.observe(viewLifecycleOwner, Observer {
+            if(!it.isNullOrEmpty())
+                requireActivity().toastLong("PROD - HAY DATA!")
+            else
+                requireActivity().toastLong("PROD - NO HAY DATA!")
+        })
+        exchangeRateList.observe(viewLifecycleOwner, Observer {
+            if(!it.isNullOrEmpty())
+                requireActivity().toastLong("EX - HAY DATA!")
+            else
+                requireActivity().toastLong("EX - NO HAY DATA!")
+        })
+        transactionList.observe(viewLifecycleOwner, Observer {
+            if(!it.isNullOrEmpty())
+                requireActivity().toastLong("TX - HAY DATA!")
+            else
+                requireActivity().toastLong("TX - NO HAY DATA!")
+        })
+        onError.observe(viewLifecycleOwner, Observer {
+            requireActivity().toastLong(it)
+        })
+    }
+
 }
