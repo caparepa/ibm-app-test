@@ -81,9 +81,6 @@ class ProductListFragment : Fragment() {
     }
 
     private fun observeViewModel() = productTransactionViewModel.run {
-        loadingState.observe(viewLifecycleOwner, Observer {
-            //setUpViews(it)
-        })
         productList.observe(viewLifecycleOwner, Observer {
             setUpViews(true)
             if (!it.isNullOrEmpty()) {
@@ -109,7 +106,6 @@ class ProductListFragment : Fragment() {
         productAdapter = getProductListAdapter(list)
         binding.rvProductList.adapter = productAdapter
         binding.rvProductList.layoutManager = LinearLayoutManager(requireActivity())
-
     }
 
     private fun getProductListAdapter(list: List<TransactionItem>): DynamicAdapter {
