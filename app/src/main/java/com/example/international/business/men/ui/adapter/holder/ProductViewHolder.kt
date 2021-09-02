@@ -21,10 +21,13 @@ class ProductViewHolder(private val view: View) :
     private val seeDetail = itemView.findViewById<ImageView>(R.id.ivSeeProductDetail)
 
     override fun bind(item: ProductItemModel, position: Int, onClick: (ItemModel, String) -> Unit) {
+
+        this.onClick = onClick
+        this.item = item
+
         val clItemLayout = itemLayout
         val tvSkuValue = skuValue
         val ivSeeDetail = seeDetail
-        this.onClick = onClick
 
         tvSkuValue.text = item.model.sku
 
