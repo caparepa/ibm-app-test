@@ -16,6 +16,7 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
     override suspend fun getExchangeRates(): List<ExchangeRateItem>? = withContext(Dispatchers.IO){
         val response = api.getExchangeRates()
         val list = response.body()
+        getOtherList(list)
         list
     }
 
@@ -24,5 +25,15 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
         list: List<ExchangeRateItem>?
     ): ExchangeRateItem? {
         TODO("Not yet implemented")
+    }
+
+    private fun getOtherList(list: List<ExchangeRateItem>?) {
+        var editList = list?.toMutableList()
+        var newList = arrayListOf<ExchangeRateItem>()
+        list?.forEach { og ->
+            editList?.forEach { ed ->
+
+            }
+        }
     }
 }

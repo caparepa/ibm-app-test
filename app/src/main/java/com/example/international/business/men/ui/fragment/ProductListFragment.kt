@@ -87,14 +87,14 @@ class ProductListFragment : Fragment() {
                 allTransactionList = it
                 setUpProductListAdapter(it)
             } else {
-                requireActivity().toastLong("PROD - NO HAY DATA!")
+                //requireActivity().toastLong("PROD - NO HAY DATA!")
             }
         })
         transactionList.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
                 productTransactionViewModel.getProductList(it)
             } else {
-                requireActivity().toastLong("TX - NO HAY DATA!")
+                //requireActivity().toastLong("TX - NO HAY DATA!")
             }
         })
         onError.observe(viewLifecycleOwner, Observer {
@@ -134,7 +134,7 @@ class ProductListFragment : Fragment() {
             }
             "go_to_detail" -> {
                 sku?.let {
-                    val bundle = bundleOf("sky" to sku, "transactionList" to allTransactionList)
+                    val bundle = bundleOf("sku" to sku, "transactionList" to allTransactionList)
                     val action: Int = R.id.action_productListFragment_to_transactionListFragment
                     findNavController().navigate(action, bundle)
                 }

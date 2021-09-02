@@ -19,6 +19,7 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
     val productList = MutableLiveData<List<TransactionItem>?>()
     val exchangeRateList = MutableLiveData<List<ExchangeRateItem>?>()
     val transactionList = MutableLiveData<List<TransactionItem>?>()
+    val transactionBySkuList = MutableLiveData<List<TransactionItem>?>()
 
     /**
      * API Call functions
@@ -46,7 +47,7 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
 
     fun getTransactionsBySku(sku: String, list: List<TransactionItem>?) {
         val result = transactionRepository.getTransactionsBySku(sku, list)
-        transactionList.postValue(result)
+        transactionBySkuList.postValue(result)
     }
 
     /**

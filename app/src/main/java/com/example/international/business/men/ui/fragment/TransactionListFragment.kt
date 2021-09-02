@@ -63,10 +63,8 @@ class TransactionListFragment : Fragment(), KoinComponent {
             loadData(it)
         }
         allTransactionList?.let {
-            requireActivity().toastLong("HAI!")
-
-            setUpTransactionListAdapter(it)
-
+            requireActivity().toastLong("ALL TRANSACTIONS")
+            productTransactionViewModel.getTransactionsBySku(sku!!, it)
         }
     }
 
@@ -81,19 +79,25 @@ class TransactionListFragment : Fragment(), KoinComponent {
     }
 
     private fun observeViewModel() = productTransactionViewModel.run {
+        transactionBySkuList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setUpTransactionListAdapter(it)
+            }
+        })
         transactionList.observe(viewLifecycleOwner, Observer {
             if(!it.isNullOrEmpty()) {
-                requireActivity().toastLong("TX - DATA!")
-                setUpTransactionListAdapter(it)
+                //requireActivity().toastLong("TX - DATA!")
+                //setUpTransactionListAdapter(it)
+
             } else {
-                requireActivity().toastLong("TX - NO DATA!")
+                //requireActivity().toastLong("TX - NO DATA!")
             }
         })
         exchangeRateList.observe(viewLifecycleOwner, Observer {
             if(!it.isNullOrEmpty()) {
-                requireActivity().toastLong("EX - DATA!")
+                //requireActivity().toastLong("EX - DATA!")
             } else {
-                requireActivity().toastLong("EX - NO DATA!")
+                //requireActivity().toastLong("EX - NO DATA!")
             }
         })
     }
@@ -122,9 +126,9 @@ class TransactionListFragment : Fragment(), KoinComponent {
 
     private var onItemClick: (ItemModel, String) -> Unit = { item, action ->
         val transaction : TransactionItemModel = item as TransactionItemModel
-        val currency = item.model.currency
-        val amountOriginal = item.model.amount
-        val amountEuro = item.model.amount
+        val currency = transaction.model.currency
+        val amountOriginal = transaction.model.amount
+        val amountEuro = transaction.model.amount
         when (action) {
             "no_action" -> {
                 requireActivity().toastLong("Amount - $currency $amountOriginal | EUR $amountEuro")
