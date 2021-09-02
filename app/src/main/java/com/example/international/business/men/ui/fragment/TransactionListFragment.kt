@@ -46,7 +46,11 @@ class TransactionListFragment : Fragment(), KoinComponent {
         else
             requireActivity().toastLong("SKU NULL!")
 
-        //runViewModel()
+        //loadTransactionList(sku)
+    }
+
+    private fun loadTransactionList(sku: String) {
+
     }
 }
 
