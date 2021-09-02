@@ -18,6 +18,8 @@ import com.example.international.business.men.ui.adapter.base.ItemModel
 import com.example.international.business.men.ui.adapter.item.model.ProductItemModel
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
+import com.example.international.business.men.utils.makeGone
+import com.example.international.business.men.utils.makeVisible
 import com.example.international.business.men.utils.toastLong
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -43,10 +45,16 @@ class ProductListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         observeViewModel()
+        // Inflate the layout for this fragment
         _binding = FragmentProductListBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.layoutLoader.parentView.makeVisible()
+        binding.rvProductList.makeGone()
     }
 
     override fun onResume() {
@@ -69,18 +77,20 @@ class ProductListFragment : Fragment() {
 
         })
         productList.observe(viewLifecycleOwner, Observer {
+            binding.layoutLoader.parentView.makeGone()
             if (!it.isNullOrEmpty()) {
                 requireActivity().toastLong("PROD - HAY DATA!")
                 setUpProductListAdapter(it)
+                binding.rvProductList.makeVisible()
             } else
                 requireActivity().toastLong("PROD - NO HAY DATA!")
         })
-        exchangeRateList.observe(viewLifecycleOwner, Observer {
+        /*exchangeRateList.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty())
                 requireActivity().toastLong("EX - HAY DATA!")
             else
                 requireActivity().toastLong("EX - NO HAY DATA!")
-        })
+        })*/
         transactionList.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty())
                 productTransactionViewModel.getProductList(it)
