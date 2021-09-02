@@ -64,13 +64,17 @@ class ProductListFragment : Fragment() {
         })
         transactionList.observe(viewLifecycleOwner, Observer {
             if(!it.isNullOrEmpty())
-                requireActivity().toastLong("TX - HAY DATA!")
+                productTransactionViewModel.getProductList(it)
             else
                 requireActivity().toastLong("TX - NO HAY DATA!")
         })
         onError.observe(viewLifecycleOwner, Observer {
             requireActivity().toastLong(it)
         })
+    }
+
+    private fun setUpProductListAdapter() {
+
     }
 
 }
