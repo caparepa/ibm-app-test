@@ -33,6 +33,13 @@ class TransactionItemViewHolder(private val view: View) :
         val tvAmountOriginal = amountOriginal
         val tvAmountEuro = amountEuro
 
+        val amountOriginal = "${item.model.currency} ${item.model.amount}"
+        val amountEuro = "EUR ${item.model.amount}"
+
+        tvSkuValue.text = item.model.sku
+        tvAmountOriginal.text = amountOriginal
+        tvAmountEuro.text = amountEuro
+
         clItemLayout.setOneOffClickListener {
             this.onClick.invoke(item, "no_action")
         }
