@@ -54,14 +54,16 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
      */
     private suspend fun getTransactionListAsync() {
         val result = kotlin.runCatching {
+            showLoading()
             transactionRepository.getTransactionList()
         }
         with(result) {
             onSuccess {
-                showLoading()
+                dismissLoading()
                 transactionList.postValue(it)
             }
             onFailure {
+                dismissLoading()
                 onError.postValue(it.message)
             }
         }
@@ -74,9 +76,11 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
         }
         with(result) {
             onSuccess {
+                dismissLoading()
                 exchangeRateList.postValue(it)
             }
             onFailure {
+                dismissLoading()
                 onError.postValue(it.message)
             }
         }

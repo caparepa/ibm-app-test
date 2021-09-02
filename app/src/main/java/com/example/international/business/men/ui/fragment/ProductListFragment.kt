@@ -18,6 +18,7 @@ import com.example.international.business.men.ui.adapter.item.model.ProductItemM
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
 import com.example.international.business.men.utils.makeGone
+import com.example.international.business.men.utils.makeInvisible
 import com.example.international.business.men.utils.makeVisible
 import com.example.international.business.men.utils.toastLong
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -52,7 +53,7 @@ class ProductListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setUpViews()
+        //setUpViews(false)
         loadProductList()
     }
 
@@ -62,42 +63,43 @@ class ProductListFragment : Fragment() {
         requireActivity().viewModelStore.clear()
     }
 
-    private fun setUpViews() {
-        binding.rvProductList.makeGone()
-        binding.layoutLoader.parentView.makeVisible()
+    private fun setUpViews(status: Boolean) {
+        if(status) {
+            binding.layoutLoader.parentView.makeGone()
+            binding.rvProductList.makeVisible()
+        } else {
+            binding.rvProductList.makeInvisible()
+            binding.layoutLoader.parentView.makeVisible()
+        }
     }
 
     private fun loadProductList() {
-        productTransactionViewModel.getExchangeRateList()
+        setUpViews(false)
         productTransactionViewModel.getTransactionList()
     }
 
     private fun observeViewModel() = productTransactionViewModel.run {
         loadingState.observe(viewLifecycleOwner, Observer {
-
+            //setUpViews(it)
         })
         productList.observe(viewLifecycleOwner, Observer {
-            binding.layoutLoader.parentView.makeGone()
+            setUpViews(true)
             if (!it.isNullOrEmpty()) {
-                requireActivity().toastLong("PROD - HAY DATA!")
+                //requireActivity().toastLong("PROD - HAY DATA!")
                 setUpProductListAdapter(it)
-                binding.rvProductList.makeVisible()
-            } else
+            } else {
                 requireActivity().toastLong("PROD - NO HAY DATA!")
+            }
         })
-        /*exchangeRateList.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty())
-                requireActivity().toastLong("EX - HAY DATA!")
-            else
-                requireActivity().toastLong("EX - NO HAY DATA!")
-        })*/
         transactionList.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty())
+            if (!it.isNullOrEmpty()) {
                 productTransactionViewModel.getProductList(it)
-            else
+            } else {
                 requireActivity().toastLong("TX - NO HAY DATA!")
+            }
         })
         onError.observe(viewLifecycleOwner, Observer {
+            setUpViews(true)
             requireActivity().toastLong(it)
         })
     }
