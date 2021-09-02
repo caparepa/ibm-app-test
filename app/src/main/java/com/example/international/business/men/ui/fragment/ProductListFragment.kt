@@ -20,7 +20,8 @@ class ProductListFragment : Fragment() {
 
     private val productTransactionViewModel: ProductTransactionViewModel by sharedViewModel()
 
-    private var binding: FragmentProductListBinding? = null
+    private var _binding: FragmentProductListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,16 +30,21 @@ class ProductListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         observeViewModel()
-        binding = FragmentProductListBinding.inflate(inflater, container, false)
-        return binding?.root
+        _binding = FragmentProductListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onResume() {
         super.onResume()
         loadProductList()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun loadProductList() {
