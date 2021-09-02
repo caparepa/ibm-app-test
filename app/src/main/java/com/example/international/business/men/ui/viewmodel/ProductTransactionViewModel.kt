@@ -16,10 +16,13 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
     private val exchangeRateRepository: ExchangeRateRepository by inject()
     private val transactionRepository: TransactionRepository by inject()
 
-    val productList = MutableLiveData<List<String>?>()
+    val productList = MutableLiveData<List<TransactionItem>?>()
     val exchangeRateList = MutableLiveData<List<ExchangeRateItem>?>()
     val transactionList = MutableLiveData<List<TransactionItem>?>()
 
+    /**
+     * API Call functions
+     */
     fun getTransactionList() {
         viewModelScope.launch {
             getTransactionListAsync()
@@ -32,6 +35,23 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
         }
     }
 
+    /**
+     * On-the-fly data transform functions (called from the fragment observer)
+     */
+
+    fun getProductList(list: List<TransactionItem>?) {
+        val result = transactionRepository.getUniqueSkuList(list)
+        productList.postValue(result)
+    }
+
+    fun getTransactionsBySku(sku: String, list: List<TransactionItem>?) {
+        val result = transactionRepository.getTransactionsBySku(sku, list)
+        transactionList.postValue(result)
+    }
+
+    /**
+     * Async functions
+     */
     private suspend fun getTransactionListAsync() {
         val result = kotlin.runCatching {
             transactionRepository.getTransactionList()
