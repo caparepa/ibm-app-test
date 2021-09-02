@@ -18,6 +18,10 @@ class TransactionRepositoryImpl(val productDao: ProductDao) : TransactionReposit
         list
     }
 
+    override fun getUniqueSkuList(list: List<TransactionItem>?): List<TransactionItem>? {
+        TODO("Not yet implemented")
+    }
+
     override fun getTransactionsBySku(sku: String, list: List<TransactionItem>?): List<TransactionItem>? {
         return list?.filter { item -> item.sku == sku}
     }

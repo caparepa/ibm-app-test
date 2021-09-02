@@ -18,4 +18,11 @@ class ExchangeRateRepositoryImpl(val exchangeRateDao: ExchangeRateDao) : Exchang
         val list = response.body()
         list
     }
+
+    override fun getComplementaryExchangeRate(
+        from: String,
+        list: List<ExchangeRateItem>?
+    ): ExchangeRateItem? {
+        TODO("Not yet implemented")
+    }
 }
