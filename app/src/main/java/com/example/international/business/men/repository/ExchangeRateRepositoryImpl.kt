@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ExchangeRateRepositoryImpl(val exchangeRateDao: ExchangeRateDao) : ExchangeRateRepository, KoinComponent {
+class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
 
     private val api = ApiClient.invoke()
 

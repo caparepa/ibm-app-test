@@ -21,8 +21,8 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    factory<TransactionRepository> { TransactionRepositoryImpl(get()) }
-    factory<ExchangeRateRepository> { ExchangeRateRepositoryImpl(get()) }
+    factory<TransactionRepository> { TransactionRepositoryImpl() }
+    factory<ExchangeRateRepository> { ExchangeRateRepositoryImpl() }
 }
 
 val dataModule = module {

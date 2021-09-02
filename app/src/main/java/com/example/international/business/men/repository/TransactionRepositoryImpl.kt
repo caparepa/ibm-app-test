@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 
-class TransactionRepositoryImpl(val productDao: ProductDao) : TransactionRepository, KoinComponent {
+class TransactionRepositoryImpl() : TransactionRepository, KoinComponent {
 
     private val api = ApiClient.invoke()
 
