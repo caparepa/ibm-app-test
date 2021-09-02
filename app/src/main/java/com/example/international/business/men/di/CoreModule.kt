@@ -7,7 +7,6 @@ object CoreModule {
     private val modules = listOf(
         networkModule,
         repositoryModule,
-        localModule,
         dataModule,
         databaseModule,
         viewModelModule,

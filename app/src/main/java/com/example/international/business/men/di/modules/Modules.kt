@@ -25,10 +25,6 @@ val repositoryModule = module {
     factory<ExchangeRateRepository> { ExchangeRateRepositoryImpl(get()) }
 }
 
-val localModule = module {
-    //TODO: YOUR CODE HERE
-}
-
 val dataModule = module {
     single { androidContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE) }
 }
