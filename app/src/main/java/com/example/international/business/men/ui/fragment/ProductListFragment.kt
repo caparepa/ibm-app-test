@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.databinding.FragmentProductListBinding
@@ -113,7 +116,6 @@ class ProductListFragment : Fragment() {
     }
 
     private var onItemClick: (ItemModel, String) -> Unit = { item, action ->
-        //TODO: make this leaner
         val product: ProductItemModel = item as ProductItemModel
         val sku = product.model.sku
         when(action) {
@@ -122,9 +124,11 @@ class ProductListFragment : Fragment() {
             }
             "go_to_detail" -> {
                 requireActivity().toastLong("You're opening $sku detail")
+                val action: NavDirections = ProductListFragmentDirections.actionProductListFragmentToTransactionListFragment()
+                findNavController().navigate(action)
             }
             else -> {
-                Log.d("TAGTAG", "message")
+                Log.d("Debug@ProductListFrament", "Other action")
             }
         }
     }
