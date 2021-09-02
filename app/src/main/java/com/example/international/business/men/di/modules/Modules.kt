@@ -1,11 +1,18 @@
 package com.example.international.business.men.di.modules
 
+import android.content.Context
 import com.example.international.business.men.data.InternationalBusinessMenDatabase
 import com.example.international.business.men.data.db.dao.ProductDao
 import com.example.international.business.men.network.api.ApiClient
 import com.example.international.business.men.network.interceptor.ConnectivityInterceptor
 import com.example.international.business.men.network.interceptor.ConnectivityInterceptorImpl
+import com.example.international.business.men.repository.ExchangeRateRepository
+import com.example.international.business.men.repository.ExchangeRateRepositoryImpl
+import com.example.international.business.men.repository.TransactionRepository
+import com.example.international.business.men.repository.TransactionRepositoryImpl
+import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val networkModule = module {
@@ -14,7 +21,8 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    //TODO: YOUR CODE HERE
+    factory<TransactionRepository> { TransactionRepositoryImpl(get()) }
+    factory<ExchangeRateRepository> { ExchangeRateRepositoryImpl(get()) }
 }
 
 val localModule = module {
@@ -22,7 +30,7 @@ val localModule = module {
 }
 
 val dataModule = module {
-    //TODO: YOUR CODE HERE
+    single { androidContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE) }
 }
 
 val databaseModule = module {
@@ -41,7 +49,7 @@ val databaseModule = module {
 }
 
 val viewModelModule = module {
-    //TODO: YOUR CODE HERE
+    viewModel { ProductTransactionViewModel(get()) }
 }
 
 val utilsModule = module {
