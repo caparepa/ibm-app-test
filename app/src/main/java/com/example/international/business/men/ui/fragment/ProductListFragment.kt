@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.international.business.men.R
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.databinding.FragmentProductListBinding
 import com.example.international.business.men.ui.adapter.base.DynamicAdapter
@@ -17,10 +19,7 @@ import com.example.international.business.men.ui.adapter.base.ItemModel
 import com.example.international.business.men.ui.adapter.item.model.ProductItemModel
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
-import com.example.international.business.men.utils.makeGone
-import com.example.international.business.men.utils.makeInvisible
-import com.example.international.business.men.utils.makeVisible
-import com.example.international.business.men.utils.toastLong
+import com.example.international.business.men.utils.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -36,6 +35,7 @@ class ProductListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var productAdapter: DynamicAdapter? = null
+    private var allTransactionList: List<TransactionItem>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +84,7 @@ class ProductListFragment : Fragment() {
         productList.observe(viewLifecycleOwner, Observer {
             setUpViews(true)
             if (!it.isNullOrEmpty()) {
+                allTransactionList = it
                 setUpProductListAdapter(it)
             } else {
                 requireActivity().toastLong("PROD - NO HAY DATA!")
@@ -133,8 +134,9 @@ class ProductListFragment : Fragment() {
             }
             "go_to_detail" -> {
                 sku?.let {
-                    val action: NavDirections = ProductListFragmentDirections.actionProductListFragmentToTransactionListFragment(sku)
-                    findNavController().navigate(action)
+                    val bundle = bundleOf("sky" to sku, "transactionList" to allTransactionList)
+                    val action: Int = R.id.action_productListFragment_to_transactionListFragment
+                    findNavController().navigate(action, bundle)
                 }
             }
             else -> {

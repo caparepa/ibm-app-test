@@ -19,9 +19,5 @@
         android:name="com.example.international.business.men.ui.fragment.TransactionListFragment"
         android:label="fragment_transaction_list"
         tools:layout="@layout/fragment_transaction_list" >
-        <argument
-            android:name="sku"
-            app:argType="string"
-            app:nullable="false" />
     </fragment>
 </navigation>
