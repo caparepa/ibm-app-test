@@ -124,8 +124,10 @@ class ProductListFragment : Fragment() {
             }
             "go_to_detail" -> {
                 requireActivity().toastLong("You're opening $sku detail")
-                val action: NavDirections = ProductListFragmentDirections.actionProductListFragmentToTransactionListFragment()
-                findNavController().navigate(action)
+                sku?.let {
+                    val action: NavDirections = ProductListFragmentDirections.actionProductListFragmentToTransactionListFragment(sku)
+                    findNavController().navigate(action)
+                }
             }
             else -> {
                 Log.d("Debug@ProductListFrament", "Other action")

@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import com.example.international.business.men.R
 import com.example.international.business.men.databinding.FragmentTransactionListBinding
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
+import com.example.international.business.men.utils.toastLong
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.component.KoinComponent
-
 /**
  * A simple [Fragment] subclass.
  * Use the [TransactionListFragment.newInstance] factory method to
@@ -21,9 +21,13 @@ class TransactionListFragment : Fragment(), KoinComponent {
     private val productTransactionViewModel: ProductTransactionViewModel by sharedViewModel()
 
     private var binding : FragmentTransactionListBinding? = null
+    private var sku: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            sku = it.getString("sku").toString()
+        }
     }
 
     override fun onCreateView(
@@ -38,6 +42,12 @@ class TransactionListFragment : Fragment(), KoinComponent {
 
     override fun onResume() {
         super.onResume()
+        if(sku != null)
+            requireActivity().toastLong("NO NULL! $sku")
+        else
+            requireActivity().toastLong("SKU NULL!")
+
         //runViewModel()
     }
 }
+

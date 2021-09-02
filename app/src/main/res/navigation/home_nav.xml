@@ -9,7 +9,7 @@
         android:id="@+id/productListFragment"
         android:name="com.example.international.business.men.ui.fragment.ProductListFragment"
         android:label="fragment_product_list"
-        tools:layout="@layout/fragment_product_list" >
+        tools:layout="@layout/fragment_product_list">
         <action
             android:id="@+id/action_productListFragment_to_transactionListFragment"
             app:destination="@id/transactionListFragment" />
@@ -18,5 +18,10 @@
         android:id="@+id/transactionListFragment"
         android:name="com.example.international.business.men.ui.fragment.TransactionListFragment"
         android:label="fragment_transaction_list"
-        tools:layout="@layout/fragment_transaction_list" />
+        tools:layout="@layout/fragment_transaction_list" >
+        <argument
+            android:name="sku"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 </navigation>
