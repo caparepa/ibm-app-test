@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +20,7 @@ import com.example.international.business.men.ui.viewmodel.ProductTransactionVie
 import com.example.international.business.men.utils.makeGone
 import com.example.international.business.men.utils.makeVisible
 import com.example.international.business.men.utils.toastLong
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +29,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  */
 class ProductListFragment : Fragment() {
 
-    private val productTransactionViewModel: ProductTransactionViewModel by sharedViewModel()
+    private val productTransactionViewModel: ProductTransactionViewModel by viewModel()
 
     private var _binding: FragmentProductListBinding? = null
     private val binding get() = _binding!!
@@ -51,20 +50,21 @@ class ProductListFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.layoutLoader.parentView.makeVisible()
-        binding.rvProductList.makeGone()
-    }
-
     override fun onResume() {
         super.onResume()
+        setUpViews()
         loadProductList()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        requireActivity().viewModelStore.clear()
+    }
+
+    private fun setUpViews() {
+        binding.rvProductList.makeGone()
+        binding.layoutLoader.parentView.makeVisible()
     }
 
     private fun loadProductList() {
@@ -133,7 +133,6 @@ class ProductListFragment : Fragment() {
                 requireActivity().toastLong("You selected the product: $sku")
             }
             "go_to_detail" -> {
-                requireActivity().toastLong("You're opening $sku detail")
                 sku?.let {
                     val action: NavDirections = ProductListFragmentDirections.actionProductListFragmentToTransactionListFragment(sku)
                     findNavController().navigate(action)

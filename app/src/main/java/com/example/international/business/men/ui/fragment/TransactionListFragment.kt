@@ -5,11 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.international.business.men.R
 import com.example.international.business.men.databinding.FragmentTransactionListBinding
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
 import com.example.international.business.men.utils.toastLong
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 /**
  * A simple [Fragment] subclass.
@@ -18,7 +17,7 @@ import org.koin.core.component.KoinComponent
  */
 class TransactionListFragment : Fragment(), KoinComponent {
 
-    private val productTransactionViewModel: ProductTransactionViewModel by sharedViewModel()
+    private val productTransactionViewModel: ProductTransactionViewModel by viewModel()
 
     private var binding : FragmentTransactionListBinding? = null
     private var sku: String? = null
