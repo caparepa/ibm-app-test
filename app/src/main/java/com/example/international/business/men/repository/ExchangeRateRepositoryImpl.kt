@@ -5,6 +5,7 @@ import com.example.international.business.men.data.db.dao.ExchangeRateDao
 import com.example.international.business.men.data.db.entity.ExchangeRateEntity
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.network.api.ApiClient
+import com.example.international.business.men.utils.roundToHalfEven
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -38,7 +39,8 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
             while (anyIndex < fromAny.size) {
                 //e.g. CAD - EUR => CAD - AUD
                 if(fromAny[anyIndex].from == toEur[eurIndex].from) {
-                    val newRate = toEur[eurIndex].rate!!.toDouble() / fromAny[anyIndex].rate!!.toDouble()
+                    val temp = toEur[eurIndex].rate!!.toDouble() / fromAny[anyIndex].rate!!.toDouble()
+                    val newRate = temp.roundToHalfEven()
                     val newToEur = ExchangeRateItem(
                         from = fromAny[anyIndex].to,
                         to = toEur[eurIndex].to,

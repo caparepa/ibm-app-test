@@ -20,6 +20,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.lang.reflect.Type
+import java.math.RoundingMode
 
 inline fun <reified T : Any> Any?.mapTo(newClass: Class<T>): T? =
     Gson().run {
@@ -254,3 +255,7 @@ fun View.makeGone() {
 /**
  * Math functions
  */
+
+fun Double.roundToHalfEven(): Double {
+    return this.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+}

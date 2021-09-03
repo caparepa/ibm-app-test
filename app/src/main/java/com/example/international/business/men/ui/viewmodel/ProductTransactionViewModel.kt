@@ -21,6 +21,7 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
     val filteredRateList = MutableLiveData<List<ExchangeRateItem>?>()
     val transactionList = MutableLiveData<List<TransactionItem>?>()
     val transactionBySkuList = MutableLiveData<List<TransactionItem>?>()
+    val totalTransactionSumInCurrency = MutableLiveData<String?>()
 
     /**
      * API Call functions
@@ -54,6 +55,10 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
     fun getFilteredExchangeRateList(to: String, list: List<ExchangeRateItem>) {
         val result = exchangeRateRepository.getMissingCurrencyRates(to, list)
         filteredRateList.postValue(result)
+    }
+
+    fun getTransactionSumInCurrency(currency: String, list: List<TransactionItem>) {
+
     }
 
     /**
