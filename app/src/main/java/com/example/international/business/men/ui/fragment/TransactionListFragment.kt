@@ -16,6 +16,7 @@ import com.example.international.business.men.ui.adapter.base.ItemModel
 import com.example.international.business.men.ui.adapter.item.model.TransactionItemModel
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
+import com.example.international.business.men.utils.CURRENCY_EUR
 import com.example.international.business.men.utils.toKotlinObject
 import com.example.international.business.men.utils.toastLong
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -94,12 +95,19 @@ class TransactionListFragment : Fragment(), KoinComponent {
         exchangeRateList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 allRateList = it
-                getFilteredExchangeRateList("EUR", it)
+                getFilteredExchangeRateList(CURRENCY_EUR, it)
             }
         })
         filteredRateList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 complementaryRateList = it
+                getTransactionSumInCurrency(it, allTransactionList!!)
+            }
+        })
+        totalTransactionSumInCurrency.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val totalSum = "$CURRENCY_EUR $it"
+                binding.tvTotalAmountValue.text = totalSum
             }
         })
     }
