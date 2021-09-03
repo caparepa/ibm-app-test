@@ -84,7 +84,7 @@ class ProductListFragment : Fragment() {
         productList.observe(viewLifecycleOwner, Observer {
             setUpViews(true)
             if (!it.isNullOrEmpty()) {
-                allTransactionList = it
+
                 setUpProductListAdapter(it)
             } else {
                 //requireActivity().toastLong("PROD - NO HAY DATA!")
@@ -92,6 +92,7 @@ class ProductListFragment : Fragment() {
         })
         transactionList.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
+                allTransactionList = it
                 productTransactionViewModel.getProductList(it)
             } else {
                 //requireActivity().toastLong("TX - NO HAY DATA!")

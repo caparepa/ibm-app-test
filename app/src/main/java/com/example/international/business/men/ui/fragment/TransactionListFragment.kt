@@ -61,6 +61,7 @@ class TransactionListFragment : Fragment(), KoinComponent {
         super.onResume()
         sku?.let {
             loadData(it)
+            binding.tvSkuValue.text = it
         }
         allTransactionList?.let {
             requireActivity().toastLong("ALL TRANSACTIONS")

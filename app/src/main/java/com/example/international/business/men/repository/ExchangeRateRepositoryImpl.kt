@@ -1,5 +1,6 @@
 package com.example.international.business.men.repository
 
+import android.util.Log
 import com.example.international.business.men.data.db.dao.ExchangeRateDao
 import com.example.international.business.men.data.db.entity.ExchangeRateEntity
 import com.example.international.business.men.data.model.ExchangeRateItem
@@ -28,12 +29,11 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
     }
 
     private fun getOtherList(list: List<ExchangeRateItem>?) {
-        var editList = list?.toMutableList()
-        var newList = arrayListOf<ExchangeRateItem>()
-        list?.forEach { og ->
-            editList?.forEach { ed ->
-
-            }
-        }
+        val ogList = list
+        var copyList = list?.toMutableList()
+        val copyFromList = copyList?.filter { item -> item.from == "EUR" }
+        val copyToList = copyList?.filter { item -> item.to == "EUR" }
+        val otherList = copyList?.removeAll{ item -> item.from == "EUR" || item.to == "EUR" }
+        val theList = copyList
     }
 }
