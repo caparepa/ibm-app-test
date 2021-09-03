@@ -36,7 +36,8 @@ class TransactionListFragment : Fragment(), KoinComponent {
     private var totalAmount: String? = null
 
     private var allTransactionList: List<TransactionItem>? = null
-    private var exchangeRatelist: List<ExchangeRateItem>? = null
+    private var allRateList: List<ExchangeRateItem>? = null
+    private var complementaryRateList: List<ExchangeRateItem>? = null
 
     private var transactionAdapter: DynamicAdapter? = null
 
@@ -66,7 +67,7 @@ class TransactionListFragment : Fragment(), KoinComponent {
         }
         allTransactionList?.let {
             requireActivity().toastLong("ALL TRANSACTIONS")
-            //productTransactionViewModel.getTransactionsBySku(sku!!, it)
+            productTransactionViewModel.getTransactionsBySku(sku!!, it)
         }
         rateTest()
     }
@@ -88,19 +89,18 @@ class TransactionListFragment : Fragment(), KoinComponent {
             }
         })
         transactionList.observe(viewLifecycleOwner, Observer {
-            if(!it.isNullOrEmpty()) {
-                //requireActivity().toastLong("TX - DATA!")
-                //setUpTransactionListAdapter(it)
-
-            } else {
-                //requireActivity().toastLong("TX - NO DATA!")
-            }
+            //TODO: since the transaction list in this page is obtained through the fragment nav arguments, there's no need to call nor observe
+            //TODO: this code is just for reference
         })
         exchangeRateList.observe(viewLifecycleOwner, Observer {
-            if(!it.isNullOrEmpty()) {
-                //requireActivity().toastLong("EX - DATA!")
-            } else {
-                //requireActivity().toastLong("EX - NO DATA!")
+            it?.let {
+                allRateList = it
+                getFilteredExchangeRateList("EUR", it)
+            }
+        })
+        filteredRateList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                complementaryRateList = it
             }
         })
     }

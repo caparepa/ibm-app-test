@@ -11,13 +11,14 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinComponent {
+class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinComponent {
 
     private val exchangeRateRepository: ExchangeRateRepository by inject()
     private val transactionRepository: TransactionRepository by inject()
 
     val productList = MutableLiveData<List<TransactionItem>?>()
     val exchangeRateList = MutableLiveData<List<ExchangeRateItem>?>()
+    val filteredRateList = MutableLiveData<List<ExchangeRateItem>?>()
     val transactionList = MutableLiveData<List<TransactionItem>?>()
     val transactionBySkuList = MutableLiveData<List<TransactionItem>?>()
 
@@ -48,6 +49,11 @@ class ProductTransactionViewModel(val context: Context): BaseViewModel(), KoinCo
     fun getTransactionsBySku(sku: String, list: List<TransactionItem>?) {
         val result = transactionRepository.getTransactionsBySku(sku, list)
         transactionBySkuList.postValue(result)
+    }
+
+    fun getFilteredExchangeRateList(to: String, list: List<ExchangeRateItem>) {
+        val result = exchangeRateRepository.getMissingCurrencyRates(to, list)
+        filteredRateList.postValue(result)
     }
 
     /**
