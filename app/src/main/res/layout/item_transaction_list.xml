@@ -13,6 +13,8 @@
         android:id="@+id/clItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:background="@drawable/item_background"
         android:clickable="true"
         android:focusable="true">
@@ -51,7 +53,6 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTxSkuValue"
             android:gravity="center_vertical">
