@@ -69,7 +69,6 @@ class TransactionListFragment : Fragment(), KoinComponent {
             requireActivity().toastLong("ALL TRANSACTIONS")
             productTransactionViewModel.getTransactionsBySku(sku!!, it)
         }
-        rateTest()
     }
 
     override fun onDestroyView() {
@@ -140,54 +139,6 @@ class TransactionListFragment : Fragment(), KoinComponent {
                 requireActivity().toastLong("NO OTHER ACTION")
             }
         }
-    }
-
-    private fun rateTest() {
-        val list = arrayListOf<ExchangeRateItem>()
-        list.add(ExchangeRateItem(from = "CAD", to =  "AUD", rate = "0.65"))
-        list.add(ExchangeRateItem(from = "AUD", to =  "CAD", rate = "1.54"))
-        list.add(ExchangeRateItem(from = "CAD", to =  "EUR", rate = "0.63"))
-        list.add(ExchangeRateItem(from = "EUR", to =  "CAD", rate = "1.59"))
-        list.add(ExchangeRateItem(from = "AUD", to =  "USD", rate = "0.73"))
-        list.add(ExchangeRateItem(from = "USD", to =  "AUD", rate = "1.37"))
-
-        //0: pasar a mutable list
-        var fromAny = list.toMutableList()
-
-        //1: sacar to=EUR a otra lista
-        var toEur: MutableList<ExchangeRateItem> = fromAny.filter { item -> item.to == "EUR" } as MutableList<ExchangeRateItem>
-
-        //2: eliminar from=EUR de fromAny
-        fromAny.removeAll { item -> item.from == "EUR" }
-        fromAny.removeAll { item -> item.to == "EUR" }
-
-        //3: iterar sobre toEur y validar sobre fromAny
-        var eurIndex = 0
-        while (eurIndex < toEur.size) {
-            var anyIndex = 0
-            while (anyIndex < fromAny.size) {
-                //e.g. CAD - EUR => CAD - AUD
-                if(fromAny[anyIndex].from == toEur[eurIndex].from) {
-                    val newRate = toEur[eurIndex].rate!!.toDouble() / fromAny[anyIndex].rate!!.toDouble()
-                    val newToEur = ExchangeRateItem(
-                        from = fromAny[anyIndex].to,
-                        to = toEur[eurIndex].to,
-                        rate = newRate.toString()
-                    )
-                    toEur.add(newToEur)
-                    fromAny.remove(fromAny[anyIndex+1])
-                    fromAny.remove(fromAny[anyIndex])
-                    //result here is adding AUD - EUR
-                } else {
-                    anyIndex++
-                }
-            }
-            eurIndex++
-        }
-
-        val sizeToEur = toEur.size
-        val sizeFromAny = fromAny.size
-
     }
 }
 

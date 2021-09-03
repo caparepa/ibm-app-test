@@ -18,7 +18,6 @@ class TransactionItemViewHolder(private val view: View) :
     private val itemLayout = itemView.findViewById<ConstraintLayout>(R.id.clItemLayout)
     private val skuValue = itemView.findViewById<TextView>(R.id.tvTxSkuValue)
     private val amountOriginal = itemView.findViewById<TextView>(R.id.tvAmountOriginal)
-    private val amountEuro = itemView.findViewById<TextView>(R.id.tvAmountEuro)
 
     override fun bind(
         item: TransactionItemModel,
@@ -31,14 +30,11 @@ class TransactionItemViewHolder(private val view: View) :
         val clItemLayout = itemLayout
         val tvSkuValue = skuValue
         val tvAmountOriginal = amountOriginal
-        val tvAmountEuro = amountEuro
 
         val amountOriginal = "${item.model.currency} ${item.model.amount}"
-        val amountEuro = "EUR ${item.model.amount}"
 
         tvSkuValue.text = item.model.sku
         tvAmountOriginal.text = amountOriginal
-        tvAmountEuro.text = amountEuro
 
         clItemLayout.setOneOffClickListener {
             this.onClick.invoke(item, "no_action")
