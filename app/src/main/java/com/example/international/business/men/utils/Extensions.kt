@@ -93,6 +93,15 @@ inline fun debugMode(block: () -> Unit) {
 }
 
 /**
+ * Executes the given [block] and returns elapsed time in milliseconds.
+ */
+inline fun measureTimeMillis(block: () -> Unit): Long {
+    val start = System.currentTimeMillis()
+    block()
+    return System.currentTimeMillis() - start
+}
+
+/**
  * Logger extension
  */
 fun logger(mode: Int, tag: String, message: String, t: Throwable? = null) {
