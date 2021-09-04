@@ -1,6 +1,7 @@
 package com.example.international.business.men.repository
 
 import com.example.international.business.men.data.model.ExchangeRateItem
+import com.example.international.business.men.data.model.ExtendedTransactionItem
 import com.example.international.business.men.data.model.TransactionItem
 
 interface TransactionRepository {
@@ -13,6 +14,10 @@ interface TransactionRepository {
         list: List<TransactionItem>?,
         currency: String
     ): Double
+    fun getExtendedTransactionList(
+        currency: String,
+        rates: List<ExchangeRateItem>,
+        list: List<TransactionItem>
+    ): List<ExtendedTransactionItem>
 
-    fun convertAmount(amount: Double, currency: String): Double
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.international.business.men.data.model.ExchangeRateItem
+import com.example.international.business.men.data.model.ExtendedTransactionItem
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.repository.ExchangeRateRepository
 import com.example.international.business.men.repository.TransactionRepository
@@ -23,6 +24,7 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
     val transactionList = MutableLiveData<List<TransactionItem>?>()
     val transactionBySkuList = MutableLiveData<List<TransactionItem>?>()
     val totalTransactionSumInCurrency = MutableLiveData<Double?>()
+    val extendedTransactionList = MutableLiveData<List<ExtendedTransactionItem>?>()
 
     /**
      * API Call functions
@@ -61,6 +63,11 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
     fun getTransactionSumInCurrency(rates: List<ExchangeRateItem>, list: List<TransactionItem>) {
         val result = transactionRepository.getSkuTransactionsAmountSum(rates, list, CURRENCY_EUR)
         totalTransactionSumInCurrency.postValue(result)
+    }
+
+    fun getExtendedTransactionList(currency: String, rates: List<ExchangeRateItem>, list: List<TransactionItem>) {
+        val result = transactionRepository.getExtendedTransactionList(currency, rates, list)
+        extendedTransactionList.postValue(result)
     }
 
     /**

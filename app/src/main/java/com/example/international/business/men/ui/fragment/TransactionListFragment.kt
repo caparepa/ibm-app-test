@@ -11,11 +11,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.international.business.men.data.model.ExchangeRateItem
+import com.example.international.business.men.data.model.ExtendedTransactionItem
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.databinding.FragmentTransactionListBinding
 import com.example.international.business.men.ui.adapter.base.DynamicAdapter
 import com.example.international.business.men.ui.adapter.base.ItemModel
-import com.example.international.business.men.ui.adapter.item.model.TransactionItemModel
+import com.example.international.business.men.ui.adapter.item.model.ExtendedTransactionItemModel
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
 import com.example.international.business.men.ui.dialog.CustomErrorDialog
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
@@ -120,43 +121,36 @@ class TransactionListFragment : Fragment(), KoinComponent {
                 }
 
                 //set up the adapter with the filtered original transaction list
-                setUpTransactionListAdapter(skuTransactionList!!)
+                getExtendedTransactionList(CURRENCY_EUR, targetRatesList!!, skuTransactionList!!)
+            }
+        })
+        extendedTransactionList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setUpTransactionListAdapter(it)
             }
         })
     }
 
-    private fun setUpTransactionListAdapter(list: List<TransactionItem>) {
+    private fun setUpTransactionListAdapter(list: List<ExtendedTransactionItem>) {
         transactionAdapter = getTransactionListAdapter(list)
         binding.rvTransactionList.adapter = transactionAdapter
         binding.rvTransactionList.layoutManager = LinearLayoutManager(requireActivity())
     }
 
-    private fun getTransactionListAdapter(list: List<TransactionItem>): DynamicAdapter {
+    private fun getTransactionListAdapter(list: List<ExtendedTransactionItem>): DynamicAdapter {
         return DynamicAdapter(
             typeFactory = TransactionItemTypeFactoryImpl(),
             items = getListForAdapter(list.toMutableList()),
-            onClick = onItemClick
+            onClick = { _, _ -> }
         )
     }
 
-    private fun getListForAdapter(list: MutableList<TransactionItem>?): List<ItemModel> {
+    private fun getListForAdapter(list: MutableList<ExtendedTransactionItem>?): List<ItemModel> {
         var result = mutableListOf<ItemModel>()
         list?.forEach {
-            result.add(TransactionItemModel(it))
+            result.add(ExtendedTransactionItemModel(it))
         }
         return result
-    }
-
-    private var onItemClick: (ItemModel, String) -> Unit = { item, action ->
-        val transaction: TransactionItemModel = item as TransactionItemModel
-        when (action) {
-            "no_action" -> {
-                requireActivity().toastLong("Item click!")
-            }
-            else -> {
-                requireActivity().toastLong("No other action!")
-            }
-        }
     }
 
     private fun showWarningDialog() {
