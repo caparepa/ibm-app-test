@@ -141,8 +141,11 @@ class ExampleUnitTest {
         modList: MutableList<ExchangeRateItem>
     ): List<ExchangeRateItem> {
 
-        //since the list is mutable from the start, we can work with it
-        modList.forEach { _ ->
+        //Create list with missing rates to iterate in (more efficient)
+        val copyList = modList.filter { item -> item.rate == null }
+
+        //since the original list is mutable from the start, we can work with it
+        copyList.forEach { _ ->
             //we obtain the first null rate for the intended currency pair (e.g. AUD-EUR)
             val missingRate =
                 modList.firstOrNull { ini -> ini.rate == null && ini.to!! == currencyCond }
@@ -166,7 +169,6 @@ class ExampleUnitTest {
                 }
             }
         }
-
         return modList
     }
 
