@@ -32,6 +32,8 @@ class CustomErrorDialog(
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         window?.setWindowAnimations(R.style.Animation_Design_BottomSheetDialog)
+
+        setDialog()
     }
 
     private fun setDialog() {
