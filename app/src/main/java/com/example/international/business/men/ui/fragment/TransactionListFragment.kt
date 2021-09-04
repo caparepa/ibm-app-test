@@ -1,7 +1,6 @@
 package com.example.international.business.men.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +15,10 @@ import com.example.international.business.men.ui.adapter.base.ItemModel
 import com.example.international.business.men.ui.adapter.item.model.TransactionItemModel
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
-import com.example.international.business.men.utils.CURRENCY_EUR
-import com.example.international.business.men.utils.toKotlinObject
-import com.example.international.business.men.utils.toastLong
+import com.example.international.business.men.utils.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
+
 /**
  * A simple [Fragment] subclass.
  * Use the [TransactionListFragment.newInstance] factory method to
@@ -30,15 +28,15 @@ class TransactionListFragment : Fragment(), KoinComponent {
 
     private val productTransactionViewModel: ProductTransactionViewModel by viewModel()
 
-    private var _binding : FragmentTransactionListBinding? = null
+    private var _binding: FragmentTransactionListBinding? = null
     private val binding get() = _binding!!
 
     private var sku: String? = null
-    private var totalAmount: String? = null
 
+    private var trimRatesList: List<ExchangeRateItem>? = null
     private var allTransactionList: List<TransactionItem>? = null
-    private var allRateList: List<ExchangeRateItem>? = null
-    private var complementaryRateList: List<ExchangeRateItem>? = null
+    private var trimTransactionList: List<TransactionItem>? = null
+    private var skuTransactionList: List<TransactionItem>? = null
 
     private var transactionAdapter: DynamicAdapter? = null
 
@@ -54,7 +52,6 @@ class TransactionListFragment : Fragment(), KoinComponent {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         observeViewModel()
         _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
         return binding.root
@@ -66,10 +63,6 @@ class TransactionListFragment : Fragment(), KoinComponent {
             loadData(it)
             binding.tvSkuValue.text = it
         }
-        allTransactionList?.let {
-            requireActivity().toastLong("ALL TRANSACTIONS")
-            productTransactionViewModel.getTransactionsBySku(sku!!, it)
-        }
     }
 
     override fun onDestroyView() {
@@ -78,36 +71,33 @@ class TransactionListFragment : Fragment(), KoinComponent {
     }
 
     private fun loadData(sku: String) {
-        //productTransactionViewModel.getTransactionList()
         productTransactionViewModel.getExchangeRateList()
     }
 
     private fun observeViewModel() = productTransactionViewModel.run {
-        transactionBySkuList.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                setUpTransactionListAdapter(it)
-            }
-        })
-        transactionList.observe(viewLifecycleOwner, Observer {
-            //TODO: since the transaction list in this page is obtained through the fragment nav arguments, there's no need to call nor observe
-            //TODO: this code is just for reference
-        })
         exchangeRateList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                allRateList = it
                 getFilteredExchangeRateList(CURRENCY_EUR, it)
             }
         })
         filteredRateList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                complementaryRateList = it
-                getTransactionSumInCurrency(it, allTransactionList!!)
+                trimRatesList = it
+                trimTransactionList = allTransactionList!!.filterMissingCurrencyTransactions(it)
+                getTransactionsBySku(sku!!, trimTransactionList!!)
+            }
+        })
+        transactionBySkuList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                skuTransactionList = it
+                getTransactionSumInCurrency(trimRatesList!!, trimTransactionList!!)
             }
         })
         totalTransactionSumInCurrency.observe(viewLifecycleOwner, Observer {
             it?.let {
                 val totalSum = "$CURRENCY_EUR $it"
                 binding.tvTotalAmountValue.text = totalSum
+                setUpTransactionListAdapter(skuTransactionList!!)
             }
         })
     }
@@ -135,16 +125,13 @@ class TransactionListFragment : Fragment(), KoinComponent {
     }
 
     private var onItemClick: (ItemModel, String) -> Unit = { item, action ->
-        val transaction : TransactionItemModel = item as TransactionItemModel
-        val currency = transaction.model.currency
-        val amountOriginal = transaction.model.amount
-        val amountEuro = transaction.model.amount
+        val transaction: TransactionItemModel = item as TransactionItemModel
         when (action) {
             "no_action" -> {
-                requireActivity().toastLong("Amount - $currency $amountOriginal | EUR $amountEuro")
+                requireActivity().toastLong("Item click!")
             }
             else -> {
-                requireActivity().toastLong("NO OTHER ACTION")
+                requireActivity().toastLong("No other action!")
             }
         }
     }

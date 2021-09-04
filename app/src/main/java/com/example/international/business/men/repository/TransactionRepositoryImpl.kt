@@ -32,18 +32,15 @@ class TransactionRepositoryImpl() : TransactionRepository, KoinComponent {
     override fun getSkuTransactionsAmountSum(rates: List<ExchangeRateItem>, list: List<TransactionItem>?): Double {
         var result: Double = 0.0
 
-        justTry {
-            list?.forEach { item ->
-                result += if(item.currency == "EUR") {
-                    item.amount!!.toDouble()
-                } else {
-                    val rateItem = rates.first { it.from == item.currency }
-                    val rate = rateItem.rate!!.toDouble()
-                    (item.amount!!.toDouble() * rate).roundToHalfEven()
-                }
+        list?.forEach { item ->
+            result += if(item.currency == "EUR") {
+                item.amount!!.toDouble()
+            } else {
+                val rateItem = rates.first { it.from == item.currency }
+                val rate = rateItem.rate!!.toDouble()
+                (item.amount!!.toDouble() * rate).roundToHalfEven()
             }
         }
-
 
         return result.roundToHalfEven()
     }

@@ -39,4 +39,8 @@ data class TransactionItem(
             return arrayOfNulls(size)
         }
     }
+
+    override fun toString(): String {
+        return "[sku: $sku amount $amount currency $currency]\n"
+    }
 }

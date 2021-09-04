@@ -10,4 +10,8 @@ data class ExchangeRateItem(
     val to: String?,
     @SerializedName("rate")
     val rate: String?
-)
+) {
+    override fun toString(): String {
+        return "[from: $from to: $to rate: $rate]\n"
+    }
+}

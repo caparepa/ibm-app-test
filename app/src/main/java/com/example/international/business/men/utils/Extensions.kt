@@ -8,6 +8,8 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.Toast
 import com.example.international.business.men.BuildConfig
+import com.example.international.business.men.data.model.ExchangeRateItem
+import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.utils.library.OnOneOffClickListener
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -258,4 +260,26 @@ fun View.makeGone() {
 
 fun Double.roundToHalfEven(): Double {
     return this.toBigDecimal().setScale(2, RoundingMode.HALF_EVEN).toDouble()
+}
+
+/**
+ * Other functions
+ */
+fun List<ExchangeRateItem>.getCurrencySet(): Set<String> {
+    val currencySet = mutableSetOf<String>()
+    this.forEach { item ->
+        currencySet.add(item.from!!)
+        currencySet.add(item.to!!)
+    }
+    return currencySet
+}
+
+fun List<TransactionItem>.filterMissingCurrencyTransactions(rates: List<ExchangeRateItem>): List<TransactionItem> {
+    val currencySet = rates.getCurrencySet()
+
+    val newList = this.filter { item ->
+        currencySet.contains(item.currency!!)
+    }
+
+    return newList
 }
