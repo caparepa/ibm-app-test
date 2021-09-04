@@ -25,7 +25,7 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
     override fun getMissingCurrencyRates(currencyTo: String, list: List<ExchangeRateItem>): List<ExchangeRateItem> {
         var result: List<ExchangeRateItem> = arrayListOf<ExchangeRateItem>()
 
-        //Converto list to mutable list
+        //Convert to list to mutable list
         val modList = list.toMutableList()
 
         //obtain a set with all currency signs
@@ -57,7 +57,7 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
         modList: MutableList<ExchangeRateItem>
     ): List<ExchangeRateItem> {
 
-        //Create list with missing rates to iterate in (more efficient)
+        //Create list with missing rates to iterate in (more efficient, less iterations)
         val copyList = modList.filter { item -> item.rate == null }
 
         //since the original list is mutable from the start, we can work with it
