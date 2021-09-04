@@ -8,6 +8,11 @@ interface TransactionRepository {
     suspend fun getTransactionList(): List<TransactionItem>?
     fun getUniqueSkuList(list: List<TransactionItem>?): List<TransactionItem>?
     fun getTransactionsBySku(sku: String, list: List<TransactionItem>?): List<TransactionItem>?
-    fun getSkuTransactionsAmountSum(rates: List<ExchangeRateItem>, list: List<TransactionItem>?): Double
+    fun getSkuTransactionsAmountSum(
+        rates: List<ExchangeRateItem>,
+        list: List<TransactionItem>?,
+        currency: String
+    ): Double
+
     fun convertAmount(amount: Double, currency: String): Double
 }

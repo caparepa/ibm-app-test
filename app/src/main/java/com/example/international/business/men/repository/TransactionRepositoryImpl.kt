@@ -26,11 +26,15 @@ class TransactionRepositoryImpl() : TransactionRepository, KoinComponent {
         return list?.filter { item -> item.sku == sku}
     }
 
-    override fun getSkuTransactionsAmountSum(rates: List<ExchangeRateItem>, list: List<TransactionItem>?): Double {
+    override fun getSkuTransactionsAmountSum(
+        rates: List<ExchangeRateItem>,
+        list: List<TransactionItem>?,
+        currency: String
+    ): Double {
         var result: Double = 0.0
 
         list?.forEach { item ->
-            result += if(item.currency == "EUR") {
+            result += if(item.currency == currency) {
                 item.amount!!.toDouble()
             } else {
                 val rateItem = rates.first { it.from == item.currency }

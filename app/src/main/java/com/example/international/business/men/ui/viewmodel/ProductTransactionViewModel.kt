@@ -7,6 +7,7 @@ import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.repository.ExchangeRateRepository
 import com.example.international.business.men.repository.TransactionRepository
+import com.example.international.business.men.utils.CURRENCY_EUR
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -58,7 +59,7 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
     }
 
     fun getTransactionSumInCurrency(rates: List<ExchangeRateItem>, list: List<TransactionItem>) {
-        val result = transactionRepository.getSkuTransactionsAmountSum(rates, list)
+        val result = transactionRepository.getSkuTransactionsAmountSum(rates, list, CURRENCY_EUR)
         totalTransactionSumInCurrency.postValue(result)
     }
 
