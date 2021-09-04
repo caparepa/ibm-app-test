@@ -41,6 +41,6 @@ data class TransactionItem(
     }
 
     override fun toString(): String {
-        return "[sku: $sku amount $amount currency $currency]\n"
+        return "[sku: $sku amount $amount currency $currency]"
     }
 }

@@ -9,9 +9,9 @@ data class ExchangeRateItem(
     @SerializedName("to")
     val to: String?,
     @SerializedName("rate")
-    val rate: String?
+    var rate: String?
 ) {
     override fun toString(): String {
-        return "[from: $from to: $to rate: $rate]\n"
+        return "[from: $from to: $to rate: $rate]"
     }
 }
