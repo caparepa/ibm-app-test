@@ -6,6 +6,5 @@ import com.example.international.business.men.ui.adapter.base.BaseTypeFactory
 
 interface TransactionItemTypeFactory: BaseTypeFactory {
     fun typeExtendedTransactionItem(type: ExtendedTransactionItem): Int
-    fun typeTransactionItem(type: TransactionItem): Int
     fun typeProduct(type: TransactionItem): Int
 }
