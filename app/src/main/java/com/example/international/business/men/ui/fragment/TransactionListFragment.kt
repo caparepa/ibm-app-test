@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.international.business.men.R
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.data.model.ExtendedTransactionItem
 import com.example.international.business.men.data.model.TransactionItem
@@ -61,8 +62,20 @@ class TransactionListFragment : Fragment(), KoinComponent {
     ): View {
         observeViewModel()
         _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
-        warningDialog = CustomErrorDialog(requireActivity(), onClick = { })
+        setUpWarningDialog()
         return binding.root
+    }
+
+    private fun setUpWarningDialog() {
+        val title = requireActivity().getString(R.string.transaction_warning_dialog_title)
+        val message = requireActivity().getString(R.string.transaction_warning_dialog_message, CURRENCY_EUR)
+        val button = requireActivity().getString(R.string.transaction_warning_dialog_button)
+        warningDialog = CustomErrorDialog(
+            context = requireActivity(),
+            title = title,
+            message = message,
+            buttonText = button,
+            onClick = { })
     }
 
     override fun onResume() {
@@ -126,11 +139,6 @@ class TransactionListFragment : Fragment(), KoinComponent {
                 val totalSum = "$CURRENCY_EUR $it"
                 binding.tvTotalAmountValue.text = totalSum
 
-                Log.d("TAGTAG", "${allTransactionList!!.size} != ${trimTransactionList!!.size}")
-                if(allTransactionList!!.size != trimTransactionList!!.size) {
-                    showWarningDialog()
-                }
-
                 //set up the adapter with the filtered original transaction list
                 getExtendedTransactionList(CURRENCY_EUR, targetRatesList!!, skuTransactionList!!)
             }
@@ -138,6 +146,9 @@ class TransactionListFragment : Fragment(), KoinComponent {
         extendedTransactionList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 setUpViews(true)
+                if(allTransactionList!!.size != trimTransactionList!!.size) {
+                    showWarningDialog()
+                }
                 setUpTransactionListAdapter(it)
             }
         })

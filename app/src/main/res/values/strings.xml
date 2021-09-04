@@ -2,4 +2,15 @@
     <string name="app_name">International Business Men</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="transaction_warning_dialog_title">Warning</string>
+    <string name="transaction_warning_dialog_message">
+        The current transaction list contains a currency sign not supported by the current exchange rate pool set.
+        The transaction list shown contains all entries, but the sum only takes into consideration the transactions with
+        conversion to the %s sign.
+    </string>
+    <string name="transaction_warning_dialog_button">Close</string>
+    <string name="custom_warning_dialog_title">Warning</string>
+    <string name="custom_warning_dialog_message">An event has occurred.
+    </string>
+    <string name="custom_warning_dialog_button">OK</string>
 </resources>
