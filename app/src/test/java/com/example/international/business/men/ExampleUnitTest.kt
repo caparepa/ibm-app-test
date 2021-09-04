@@ -1,6 +1,5 @@
 package com.example.international.business.men
 
-import android.util.Log
 import com.example.international.business.men.data.model.ExchangeRateItem
 import org.junit.Test
 
@@ -40,7 +39,7 @@ class ExampleUnitTest {
 
         val missingRatesAux: List<ExchangeRateItem> = getMissingCurrencyRatesAuxList(mockToCurrency, rateList)
 
-        val missingRatesPrime: List<ExchangeRateItem> = getMissingCurrencyRatesFunctional("EUR", rateList)
+        val missingRatesPrime: List<ExchangeRateItem> = getMissingCurrencyRates("EUR", rateList)
 
         val totalSum: Double = getSkuTransactionsAmountSum(mockToCurrency, missingRatesAux, allTransactionList)
     }
@@ -95,7 +94,7 @@ class ExampleUnitTest {
 
         val missingRatesAux: List<ExchangeRateItem> =
             measureTimeMillis({ time -> println("getMissingCurrencyRatesFunctional (Fun) took $time") }) {
-                getMissingCurrencyRatesFunctional(mockToCurrency, rateList)
+                getMissingCurrencyRates(mockToCurrency, rateList)
             }
 
         val totalSum: Double =
@@ -108,7 +107,7 @@ class ExampleUnitTest {
     /**
      * Get the missing rates (functional)
      */
-    private fun getMissingCurrencyRatesFunctional(
+    private fun getMissingCurrencyRates(
         currencyTo: String,
         list: List<ExchangeRateItem>
     ): List<ExchangeRateItem> {
@@ -133,7 +132,7 @@ class ExampleUnitTest {
         }
 
         //calculate the missing (null) rates
-        result = calculateRatesFunctional(currencyTo, modList)
+        result = calculateRates(currencyTo, modList)
 
         //return result
         return result
@@ -142,7 +141,7 @@ class ExampleUnitTest {
     /**
      * Calculate missing rates (functional)
      */
-    private fun calculateRatesFunctional(
+    private fun calculateRates(
         currencyCond: String,
         modList: MutableList<ExchangeRateItem>
     ): List<ExchangeRateItem> {

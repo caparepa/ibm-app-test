@@ -2,6 +2,7 @@ package com.example.international.business.men.repository
 
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.network.api.ApiClient
+import com.example.international.business.men.utils.permutations
 import com.example.international.business.men.utils.roundToHalfEven
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,42 +18,85 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
         list
     }
 
-    override fun getMissingCurrencyRates(to: String, list: List<ExchangeRateItem>): List<ExchangeRateItem> {
-        //0: pasar a mutable list
-        var fromAny = list.toMutableList()
+    /**
+     * Get the missing rates (functional)
+     */
+    override fun getMissingCurrencyRates(currencyTo: String, list: List<ExchangeRateItem>): List<ExchangeRateItem> {
+        var result: List<ExchangeRateItem> = arrayListOf<ExchangeRateItem>()
 
-        //1: sacar to=EUR a otra lista
-        var toEur: MutableList<ExchangeRateItem> = fromAny.filter { item -> item.to == "EUR" } as MutableList<ExchangeRateItem>
+        //Converto list to mutable list
+        val modList = list.toMutableList()
 
-        //2: eliminar from=EUR de fromAny
-        fromAny.removeAll { item -> item.from == to }
-        fromAny.removeAll { item -> item.to == to }
+        //obtain a set with all currency signs
+        val currencySet = getCurrencySet(list)
 
-        //3: iterar sobre toEur y validar sobre fromAny
-        var eurIndex = 0
-        while (eurIndex < toEur.size) {
-            var anyIndex = 0
-            while (anyIndex < fromAny.size) {
-                //e.g. CAD - EUR => CAD - AUD
-                if(fromAny[anyIndex].from == toEur[eurIndex].from) {
-                    val temp = toEur[eurIndex].rate!!.toDouble() / fromAny[anyIndex].rate!!.toDouble()
-                    val newRate = temp.roundToHalfEven()
-                    val newToEur = ExchangeRateItem(
-                        from = fromAny[anyIndex].to,
-                        to = toEur[eurIndex].to,
-                        rate = newRate.toString()
-                    )
-                    toEur.add(newToEur)
-                    fromAny.remove(fromAny[anyIndex+1])
-                    fromAny.remove(fromAny[anyIndex])
-                    //result here is adding AUD - EUR
-                } else {
-                    anyIndex++
-                }
+        //obtain all permutations from the currency set
+        val permutations = currencySet.permutations()
+
+        //add the missing rate permutations with null rate to the mutable list
+        permutations.forEach { item ->
+            val r = modList.firstOrNull() { elem -> elem.from == item[0] && elem.to == item[1] }
+            if (r == null && item[1] == currencyTo) {
+                modList.add(ExchangeRateItem(from = item[0], to = item[1], rate = null))
             }
-            eurIndex++
         }
 
-        return toEur
+        //calculate the missing (null) rates
+        result = calculateRates(currencyTo, modList)
+
+        //return result
+        return result
     }
+
+    /**
+     * Calculate missing rates (functional)
+     */
+    private fun calculateRates(
+        currencyCond: String,
+        modList: MutableList<ExchangeRateItem>
+    ): List<ExchangeRateItem> {
+
+        //Create list with missing rates to iterate in (more efficient)
+        val copyList = modList.filter { item -> item.rate == null }
+
+        //since the original list is mutable from the start, we can work with it
+        copyList.forEach { _ ->
+            //we obtain the first null rate for the intended currency pair (e.g. AUD-EUR)
+            val missingRate =
+                modList.firstOrNull { ini -> ini.rate == null && ini.to!! == currencyCond }
+            //
+            if (missingRate != null) {
+                //if pair is found, look for a pivot (e.g. AUD-CAD (this is the pivot) -> CAD-EUR)
+                val pivotRate =
+                    modList.firstOrNull { sec -> sec.rate != null && sec.from!! == missingRate.from!! }
+                if (pivotRate != null) {
+                    //if pivot is found, loof for the end rate (e.g. AUD-CAD -> CAD-EUR (this is the end rate)
+                    val endRate =
+                        modList.firstOrNull { ter -> ter.rate != null && ter.to!! == missingRate.to!! }
+                    if (endRate != null) {
+                        //if end rate is found, calculate missing rate
+                        val result = endRate.rate!!.toDouble() * pivotRate.rate!!.toDouble()
+                        //get current item index
+                        val index = modList.indexOf(missingRate)
+                        //update current object rate
+                        modList[index].rate = result.roundToHalfEven().toString()
+                    }
+                }
+            }
+        }
+        return modList
+    }
+
+    /**
+     * Get currency set
+     */
+    private fun getCurrencySet(list: List<ExchangeRateItem>): Set<String> {
+        val currencySet = mutableSetOf<String>()
+        list.forEach { item ->
+            currencySet.add(item.from!!)
+            currencySet.add(item.to!!)
+        }
+        return currencySet
+    }
+
 }
