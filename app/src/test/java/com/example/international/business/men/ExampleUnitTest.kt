@@ -105,6 +105,9 @@ class ExampleUnitTest {
 
     }
 
+    /**
+     * Get the missing rates (functional)
+     */
     private fun getMissingCurrencyRatesFunctional(
         currencyTo: String,
         list: List<ExchangeRateItem>
@@ -136,6 +139,9 @@ class ExampleUnitTest {
         return result
     }
 
+    /**
+     * Calculate missing rates (functional)
+     */
     private fun calculateRatesFunctional(
         currencyCond: String,
         modList: MutableList<ExchangeRateItem>
@@ -172,6 +178,9 @@ class ExampleUnitTest {
         return modList
     }
 
+    /**
+     * Get currency set
+     */
     private fun getCurrencySet(list: List<ExchangeRateItem>): Set<String> {
         val currencySet = mutableSetOf<String>()
         list.forEach { item ->
@@ -181,6 +190,9 @@ class ExampleUnitTest {
         return currencySet
     }
 
+    /**
+     * Get filtered transaction list by sku
+     */
     private fun getTransactionsBySku(
         sku: String,
         list: List<TransactionItem>?
@@ -188,6 +200,9 @@ class ExampleUnitTest {
         return list?.filter { item -> item.sku == sku }
     }
 
+    /**
+     * Get currency rate with auxiliar arrays
+     */
     private fun getMissingCurrencyRatesAuxList(
         currencyTo: String,
         list: List<ExchangeRateItem>
@@ -232,6 +247,9 @@ class ExampleUnitTest {
         return toEndCurr
     }
 
+    /**
+     * Get transaction sum
+     */
     private fun getSkuTransactionsAmountSum(
         currencyTo: String,
         rates: List<ExchangeRateItem>,
