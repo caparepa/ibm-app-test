@@ -1,11 +1,13 @@
 package com.example.international.business.men
 
+import android.util.Log
 import com.example.international.business.men.data.model.ExchangeRateItem
 import org.junit.Test
 
 import org.junit.Assert.*
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.utils.CURRENCY_EUR
+import com.example.international.business.men.utils.measureTimeMillis
 import com.example.international.business.men.utils.permutations
 import com.example.international.business.men.utils.roundToHalfEven
 
@@ -34,16 +36,72 @@ class ExampleUnitTest {
         val allTransactionList = initTransactionList()
 
         //filter transactions by sku
-        var filteredTransactionList = getTransactionsBySku(mockSku, allTransactionList)
+        var filteredTransactionList: List<TransactionItem>? = getTransactionsBySku(mockSku, allTransactionList)
 
-        val missingRatesAux = getMissingCurrencyRatesAuxList(mockToCurrency, rateList)
-        println("missingRates")
-        missingRatesAux.forEach { item ->
-            println(item)
-        }
-        val totalSum = getSkuTransactionsAmountSum(mockToCurrency, missingRatesAux, allTransactionList)
-        val missingRatesPrime = getMissingCurrencyRatesFunctional("EUR", rateList)
-        println("totalsum $totalSum")
+        val missingRatesAux: List<ExchangeRateItem> = getMissingCurrencyRatesAuxList(mockToCurrency, rateList)
+
+        val missingRatesPrime: List<ExchangeRateItem> = getMissingCurrencyRatesFunctional("EUR", rateList)
+
+        val totalSum: Double = getSkuTransactionsAmountSum(mockToCurrency, missingRatesAux, allTransactionList)
+    }
+
+    @Test
+    fun evaluate_missingRatesAux() {
+
+        val mockSku = "N6330"
+        val mockToCurrency = CURRENCY_EUR
+
+        //obtain mock rate list
+        val rateList = initExchangeRateList()
+
+        //obtain mock transaction list
+        val allTransactionList = initTransactionList()
+
+        //filter transactions by sku
+        var filteredTransactionList: List<TransactionItem>? =
+            measureTimeMillis({ time -> println("getTransactionsBySku (Aux) took $time") }) {
+                getTransactionsBySku(mockSku, allTransactionList)
+            }
+
+        val missingRatesAux: List<ExchangeRateItem> =
+            measureTimeMillis({ time -> println("getMissingCurrencyRatesAuxList(Aux) took $time") }) {
+                getMissingCurrencyRatesAuxList(mockToCurrency, rateList)
+            }
+
+        val totalSum: Double =
+            measureTimeMillis({ time -> println("getSkuTransactionsAmountSum (Aux) took $time") }) {
+                getSkuTransactionsAmountSum(mockToCurrency, missingRatesAux, allTransactionList)
+            }
+
+    }
+
+    @Test
+    fun evaluate_missingRatesFun() {
+
+        val mockSku = "N6330"
+        val mockToCurrency = CURRENCY_EUR
+
+        //obtain mock rate list
+        val rateList = initExchangeRateList()
+
+        //obtain mock transaction list
+        val allTransactionList = initTransactionList()
+
+        //filter transactions by sku
+        var filteredTransactionList: List<TransactionItem>? =
+            measureTimeMillis({ time -> println("getTransactionsBySku (Fun) took $time") }) {
+                getTransactionsBySku(mockSku, allTransactionList)
+            }
+
+        val missingRatesAux: List<ExchangeRateItem> =
+            measureTimeMillis({ time -> println("getMissingCurrencyRatesFunctional (Fun) took $time") }) {
+                getMissingCurrencyRatesFunctional(mockToCurrency, rateList)
+            }
+
+        val totalSum: Double =
+            measureTimeMillis({ time -> println("getSkuTransactionsAmountSum (Fun) took $time") }) {
+                getSkuTransactionsAmountSum(mockToCurrency, missingRatesAux, allTransactionList)
+            }
 
     }
 

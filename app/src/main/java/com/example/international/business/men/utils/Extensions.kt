@@ -102,6 +102,20 @@ inline fun measureTimeMillis(block: () -> Unit): Long {
 }
 
 /**
+ * Executes the given [block], sets elapsed time in milliseconds and
+ * returns function result
+ */
+inline fun <T> measureTimeMillis(loggingFunction: (Long) -> Unit,
+                                 function: () -> T): T {
+
+    val startTime = System.currentTimeMillis()
+    val result: T = function.invoke()
+    loggingFunction.invoke(System.currentTimeMillis() - startTime)
+
+    return result
+}
+
+/**
  * Logger extension
  */
 fun logger(mode: Int, tag: String, message: String, t: Throwable? = null) {
