@@ -67,6 +67,7 @@ class TransactionListFragment : Fragment(), KoinComponent {
 
     override fun onResume() {
         super.onResume()
+        setUpViews(false)
         sku?.let {
             loadData()
             binding.tvSkuValue.text = it
@@ -76,6 +77,16 @@ class TransactionListFragment : Fragment(), KoinComponent {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setUpViews(status: Boolean) {
+        if(status) {
+            binding.layoutLoader.parentView.makeGone()
+            binding.rvTransactionList.makeVisible()
+        } else {
+            binding.rvTransactionList.makeInvisible()
+            binding.layoutLoader.parentView.makeVisible()
+        }
     }
 
     private fun loadData() {
@@ -126,6 +137,7 @@ class TransactionListFragment : Fragment(), KoinComponent {
         })
         extendedTransactionList.observe(viewLifecycleOwner, Observer {
             it?.let {
+                setUpViews(true)
                 setUpTransactionListAdapter(it)
             }
         })
