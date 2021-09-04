@@ -2,6 +2,7 @@ package com.example.international.business.men.repository
 
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.network.api.ApiClient
+import com.example.international.business.men.utils.getCurrencySet
 import com.example.international.business.men.utils.permutations
 import com.example.international.business.men.utils.roundToHalfEven
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
         val modList = list.toMutableList()
 
         //obtain a set with all currency signs
-        val currencySet = getCurrencySet(list)
+        val currencySet = list.getCurrencySet()
 
         //obtain all permutations from the currency set
         val permutations = currencySet.permutations()
@@ -85,18 +86,6 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
             }
         }
         return modList
-    }
-
-    /**
-     * Get currency set
-     */
-    private fun getCurrencySet(list: List<ExchangeRateItem>): Set<String> {
-        val currencySet = mutableSetOf<String>()
-        list.forEach { item ->
-            currencySet.add(item.from!!)
-            currencySet.add(item.to!!)
-        }
-        return currencySet
     }
 
 }
