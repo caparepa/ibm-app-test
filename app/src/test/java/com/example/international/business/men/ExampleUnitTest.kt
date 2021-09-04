@@ -78,7 +78,7 @@ class ExampleUnitTest {
         return result
     }
 
-    fun calculateRatesFunctional(
+    private fun calculateRatesFunctional(
         currencyCond: String,
         modList: MutableList<ExchangeRateItem>
     ): List<ExchangeRateItem> {
@@ -90,7 +90,7 @@ class ExampleUnitTest {
                 modList.firstOrNull { ini -> ini.rate == null && ini.to!! == currencyCond }
             //
             if (missingRate != null) {
-                //if pair is foud, look for a pivot (e.g. AUD-CAD (this is the pivot) -> CAD-EUR)
+                //if pair is found, look for a pivot (e.g. AUD-CAD (this is the pivot) -> CAD-EUR)
                 val pivotRate =
                     modList.firstOrNull { sec -> sec.rate != null && sec.from!! == missingRate.from!! }
                 if (pivotRate != null) {
