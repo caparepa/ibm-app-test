@@ -4,6 +4,8 @@ import android.content.Context
 import com.example.international.business.men.network.api.ApiClient
 import com.example.international.business.men.network.interceptor.ConnectivityInterceptor
 import com.example.international.business.men.network.interceptor.ConnectivityInterceptorImpl
+import com.example.international.business.men.network.interceptor.HeaderInterceptor
+import com.example.international.business.men.network.interceptor.HeaderInterceptorImpl
 import com.example.international.business.men.repository.ExchangeRateRepository
 import com.example.international.business.men.repository.ExchangeRateRepositoryImpl
 import com.example.international.business.men.repository.TransactionRepository
@@ -16,6 +18,7 @@ import org.koin.dsl.module
 val networkModule = module {
     single { ApiClient.invoke() }
     single<ConnectivityInterceptor> { ConnectivityInterceptorImpl(get()) }
+    single<HeaderInterceptor> { HeaderInterceptorImpl() }
 }
 
 val repositoryModule = module {
