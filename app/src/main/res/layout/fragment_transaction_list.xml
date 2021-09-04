@@ -94,9 +94,9 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/rvTransactionList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llTitleContainer" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -104,15 +104,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false"
-        android:overScrollMode="never"
-        android:paddingTop="5dp"
+        android:overScrollMode="always"
         android:paddingStart="16dp"
+        android:paddingTop="5dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="?attr/actionBarSize"
+        android:paddingBottom="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vSeparator"
+        tools:itemCount="20"
         tools:listitem="@layout/item_transaction_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
