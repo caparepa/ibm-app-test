@@ -1,8 +1,6 @@
 package com.example.international.business.men.di.modules
 
 import android.content.Context
-import com.example.international.business.men.data.InternationalBusinessMenDatabase
-import com.example.international.business.men.data.db.dao.ProductDao
 import com.example.international.business.men.network.api.ApiClient
 import com.example.international.business.men.network.interceptor.ConnectivityInterceptor
 import com.example.international.business.men.network.interceptor.ConnectivityInterceptorImpl
@@ -29,25 +27,6 @@ val dataModule = module {
     single { androidContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE) }
 }
 
-val databaseModule = module {
-    /*single { InternationalBusinessMenDatabase.invoke(androidContext()) }
-
-    fun provideProductDao(database: InternationalBusinessMenDatabase): ProductDao {
-        return database.getProductDao()
-    }
-
-    single { provideProductDao(get()) }*/
-
-    //TODO: YOUR CODE HERE
-    //NOTE: since the data source return random values with each request,
-    //there's no point on persisting in the database
-
-}
-
 val viewModelModule = module {
     viewModel { ProductTransactionViewModel(get()) }
-}
-
-val utilsModule = module {
-    //TODO: YOUR CODE HERE
 }

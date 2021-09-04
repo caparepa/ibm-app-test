@@ -8,9 +8,7 @@ object CoreModule {
         networkModule,
         repositoryModule,
         dataModule,
-        databaseModule,
         viewModelModule,
-        utilsModule
     )
 
     fun init() = loadKoinModules(modules)

@@ -1,11 +1,8 @@
 package com.example.international.business.men.repository
 
-import com.example.international.business.men.data.db.dao.ProductDao
-import com.example.international.business.men.data.db.entity.ProductEntity
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.network.api.ApiClient
-import com.example.international.business.men.utils.justTry
 import com.example.international.business.men.utils.roundToHalfEven
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

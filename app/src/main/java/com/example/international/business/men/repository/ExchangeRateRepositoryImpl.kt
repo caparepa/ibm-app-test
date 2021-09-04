@@ -1,15 +1,11 @@
 package com.example.international.business.men.repository
 
-import android.util.Log
-import com.example.international.business.men.data.db.dao.ExchangeRateDao
-import com.example.international.business.men.data.db.entity.ExchangeRateEntity
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.network.api.ApiClient
 import com.example.international.business.men.utils.roundToHalfEven
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
 
