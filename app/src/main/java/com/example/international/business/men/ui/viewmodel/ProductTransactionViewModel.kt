@@ -53,7 +53,7 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
         transactionBySkuList.postValue(result)
     }
 
-    fun getFilteredExchangeRateList(to: String, list: List<ExchangeRateItem>) {
+    fun getMissingCurrencyRates(to: String, list: List<ExchangeRateItem>) {
         val result = exchangeRateRepository.getMissingCurrencyRates(to, list)
         filteredRateList.postValue(result)
     }

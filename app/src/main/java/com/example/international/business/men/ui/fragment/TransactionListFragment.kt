@@ -1,6 +1,9 @@
 package com.example.international.business.men.ui.fragment
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +17,7 @@ import com.example.international.business.men.ui.adapter.base.DynamicAdapter
 import com.example.international.business.men.ui.adapter.base.ItemModel
 import com.example.international.business.men.ui.adapter.item.model.TransactionItemModel
 import com.example.international.business.men.ui.adapter.type.factory.TransactionItemTypeFactoryImpl
+import com.example.international.business.men.ui.dialog.CustomErrorDialog
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
 import com.example.international.business.men.utils.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,13 +36,15 @@ class TransactionListFragment : Fragment(), KoinComponent {
     private val binding get() = _binding!!
 
     private var sku: String? = null
+    private var currencySet: List<String>? = null
 
-    private var trimRatesList: List<ExchangeRateItem>? = null
-    private var allTransactionList: List<TransactionItem>? = null
-    private var trimTransactionList: List<TransactionItem>? = null
-    private var skuTransactionList: List<TransactionItem>? = null
+    private var targetRatesList: List<ExchangeRateItem>? = null       //list with the target currency exchange rate
+    private var allTransactionList: List<TransactionItem>? = null   //all transaction list from API
+    private var trimTransactionList: List<TransactionItem>? = null  //filtered transaction list (discarding currencies not found in [currencySet]
+    private var skuTransactionList: List<TransactionItem>? = null   //filtered transaction list by sku
 
     private var transactionAdapter: DynamicAdapter? = null
+    private var warningDialog: CustomErrorDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,13 +60,14 @@ class TransactionListFragment : Fragment(), KoinComponent {
     ): View {
         observeViewModel()
         _binding = FragmentTransactionListBinding.inflate(inflater, container, false)
+        warningDialog = CustomErrorDialog(requireActivity(), onClick = { })
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
         sku?.let {
-            loadData(it)
+            loadData()
             binding.tvSkuValue.text = it
         }
     }
@@ -70,33 +77,49 @@ class TransactionListFragment : Fragment(), KoinComponent {
         _binding = null
     }
 
-    private fun loadData(sku: String) {
+    private fun loadData() {
         productTransactionViewModel.getExchangeRateList()
     }
 
     private fun observeViewModel() = productTransactionViewModel.run {
         exchangeRateList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                getFilteredExchangeRateList(CURRENCY_EUR, it)
+                //obtain currency set from current exchange rate pool
+                currencySet = it.getCurrencySet().toList()
+                //get the currency exchange rate that are missing for the target currency (e.g. EUR)
+                getMissingCurrencyRates(CURRENCY_EUR, it)
             }
         })
         filteredRateList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                trimRatesList = it
+                //get target rate list
+                targetRatesList = it
+                //filter the the transactions that don't cover the currency set
                 trimTransactionList = allTransactionList!!.filterMissingCurrencyTransactions(it)
-                getTransactionsBySku(sku!!, trimTransactionList!!)
+                //filter all transactions by sku
+                getTransactionsBySku(sku!!, allTransactionList!!)
             }
         })
         transactionBySkuList.observe(viewLifecycleOwner, Observer {
             it?.let {
+                //
                 skuTransactionList = it
-                getTransactionSumInCurrency(trimRatesList!!, trimTransactionList!!)
+                //obtain the sum for the trimmed filtered transactions
+                getTransactionSumInCurrency(targetRatesList!!, trimTransactionList!!)
             }
         })
         totalTransactionSumInCurrency.observe(viewLifecycleOwner, Observer {
             it?.let {
+                //set up total amount
                 val totalSum = "$CURRENCY_EUR $it"
                 binding.tvTotalAmountValue.text = totalSum
+
+                Log.d("TAGTAG", "${allTransactionList!!.size} != ${trimTransactionList!!.size}")
+                if(allTransactionList!!.size != trimTransactionList!!.size) {
+                    showWarningDialog()
+                }
+
+                //set up the adapter with the filtered original transaction list
                 setUpTransactionListAdapter(skuTransactionList!!)
             }
         })
@@ -133,6 +156,14 @@ class TransactionListFragment : Fragment(), KoinComponent {
             else -> {
                 requireActivity().toastLong("No other action!")
             }
+        }
+    }
+
+    private fun showWarningDialog() {
+        warningDialog?.let {
+            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it.setCancelable(true)
+            it.show()
         }
     }
 }
