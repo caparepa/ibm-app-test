@@ -480,6 +480,4 @@ class ExampleUnitTest {
         return result.roundToHalfEven()
     }
 
-
-
 }
