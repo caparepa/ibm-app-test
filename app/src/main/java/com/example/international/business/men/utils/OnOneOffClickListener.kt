@@ -1,8 +1,7 @@
-package com.example.international.business.men.utils.library
+package com.example.international.business.men.utils
 
 import android.os.SystemClock
 import android.view.View
-import com.example.international.business.men.utils.delayAction
 
 abstract class OnOneOffClickListener : View.OnClickListener {
     private var mLastClickTime: Long = 0

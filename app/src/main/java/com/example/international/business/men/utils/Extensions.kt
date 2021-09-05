@@ -10,7 +10,6 @@ import android.widget.Toast
 import com.example.international.business.men.BuildConfig
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.data.model.TransactionItem
-import com.example.international.business.men.utils.library.OnOneOffClickListener
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray

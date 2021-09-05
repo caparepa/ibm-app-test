@@ -83,7 +83,6 @@ dependencies {
     val koinVersion by extra("3.1.0")
     val retrofitVersion by extra("2.9.0")
     val okhttpVersion by extra("4.5.0")
-    val roomVersion by extra("2.3.0")
 
     //OKHTTP
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
@@ -101,10 +100,6 @@ dependencies {
 
     // Koin for android
     implementation("io.insert-koin:koin-android:$koinVersion")
-
-    //room
-    implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
 
     //spinkit
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
