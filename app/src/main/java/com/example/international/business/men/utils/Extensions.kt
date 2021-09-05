@@ -22,6 +22,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.lang.reflect.Type
 import java.math.RoundingMode
+import kotlin.random.Random
 
 inline fun <reified T : Any> Any?.mapTo(newClass: Class<T>): T? =
     Gson().run {
@@ -304,4 +305,31 @@ fun List<TransactionItem>.filterMissingCurrencyTransactions(rates: List<Exchange
     }
 
     return newList
+}
+
+fun generateRandomSku(): String {
+    val charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    val numSet = "0123456789"
+    var numCode = ""
+
+    justTry {
+        for (i in 0..4) {
+            numCode += if(i == 0)
+                charSet.random()
+            else
+                numSet.random()
+        }
+    }
+    return numCode
+}
+
+fun generateRandomAmount(): String {
+    val from = 10.0
+    val until = 40.0
+    val amount = Random.nextDouble(from, until).roundToHalfEven()
+    return amount.toString()
+}
+
+fun getRandomCurrency(list: List<String>): String {
+    return list.random()
 }
