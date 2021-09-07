@@ -1,18 +1,51 @@
 package com.example.international.business.men.repository
 
+import com.example.international.business.men.base.BaseUTTest
 import com.example.international.business.men.data.model.ExchangeRateItem
+import com.example.international.business.men.di.configureAppTestModules
+import com.example.international.business.men.network.api.ApiClient
+import com.example.international.business.men.utils.CURRENCY_EUR
 import com.example.international.business.men.utils.getCurrencySet
 import com.example.international.business.men.utils.permutations
 import com.example.international.business.men.utils.roundToHalfEven
-import org.junit.Assert.*
+import junit.framework.Assert.assertNotNull
+import kotlinx.coroutines.runBlocking
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.Before
+import org.junit.Rule
 
 import org.junit.Test
+import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
+import org.koin.test.inject
+import java.net.HttpURLConnection
 
-class ExchangeRateRepositoryImplTest: KoinTest {
+class ExchangeRateRepositoryImplTest: BaseUTTest(), KoinTest {
+
+    private lateinit var repo: ExchangeRateRepository
+    val api: ApiClient by inject()
+    val mockWebServer : MockWebServer by inject()
+
+    val currency = CURRENCY_EUR
+
+    @Before
+    fun start() {
+        super.setUp()
+        startKoin {
+            modules(
+                configureAppTestModules(getMockWebServerUrl())
+            )
+        }
+    }
 
     @Test
-    fun getExchangeRates() {
+    fun getExchangeRates() = runBlocking<Unit>{
+        mockNetworkResponseWithFileContent("ibm_mock_rates.json", HttpURLConnection.HTTP_OK)
+        repo = ExchangeRateRepositoryImpl()
+        val result = repo.getExchangeRates()
+
+        assertNotNull(result)
+
     }
 
     @Test
