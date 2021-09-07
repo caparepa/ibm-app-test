@@ -20,23 +20,20 @@ import org.koin.test.inject
 import java.net.HttpURLConnection
 
 @RunWith(JUnit4::class)
-class ExchangeRateRepositoryImplTest: BaseUTTest(), KoinTest {
+class ExchangeRateRepositoryImplTest : BaseUTTest(), KoinTest {
 
     private lateinit var repo: ExchangeRateRepository
-    val api: ApiClient by inject()
-    val mockWebServer : MockWebServer by inject()
-    val exchangeRateUtils: ExchangeRateItemUtils by inject()
 
-    val currency = CURRENCY_EUR
+    val api: ApiClient by inject()
+    val mockWebServer: MockWebServer by inject()
+
+    private val exchangeRateUtils: ExchangeRateItemUtils by inject()
+    private val currency = CURRENCY_EUR
 
     @Before
     fun start() {
         super.setUp()
-        startKoin {
-            modules(
-                configureAppTestModules(getMockWebServerUrl())
-            )
-        }
+        startKoin { modules(configureAppTestModules(getMockWebServerUrl())) }
     }
 
     @Test
@@ -49,17 +46,14 @@ class ExchangeRateRepositoryImplTest: BaseUTTest(), KoinTest {
 
     @Test
     fun getMissingCurrencyRates() {
-        var rates: List<ExchangeRateItem> = arrayListOf()
         val dataJson = getJson("ibm_mock_rates.json")
-        rates = parseArray(dataJson, object: TypeToken<List<ExchangeRateItem>>() {}.type)
+        val rates: List<ExchangeRateItem> =
+            parseArray(dataJson, object : TypeToken<List<ExchangeRateItem>>() {}.type)
 
         val modList = exchangeRateUtils.obtainMissingExchangePairs(rates, currency)
-
         assert(modList.isNotEmpty())
 
         val result = exchangeRateUtils.calculateMissingExchangeRates(currency, modList)
-
         assert(result.isNotEmpty())
-
     }
 }
