@@ -17,6 +17,7 @@ import org.junit.runners.JUnit4
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import org.mockito.junit.MockitoJUnitRunner
 import java.net.HttpURLConnection
 
 @RunWith(JUnit4::class)
