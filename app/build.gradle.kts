@@ -70,10 +70,25 @@ dependencies {
 }
 
 dependencies {
+    val mockitoVersion by extra("3.12.4")
+    val mockitoDexVersion by extra("2.12.1")
+    val coroutinesTestVersion by extra("1.5.1")
+    val mockWebServerVersion by extra("4.9.1")
+
     //Test dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+
+    //mockito test
+    testImplementation ("org.mockito:mockito-core:$mockitoVersion")
+    testImplementation ("org.mockito:mockito-inline:$mockitoVersion")
+    testImplementation ("com.linkedin.dexmaker:dexmaker-mockito:$mockitoDexVersion")
+
+    // Mock retrofit for test
+    testImplementation("com.squareup.okhttp3:mockwebserver:$mockWebServerVersion")
+    // coroutine test library
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion")
 }
 
 dependencies {
