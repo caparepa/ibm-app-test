@@ -9,6 +9,7 @@ object CoreModule {
         repositoryModule,
         dataModule,
         viewModelModule,
+        utilityModule
     )
 
     fun init() = loadKoinModules(modules)

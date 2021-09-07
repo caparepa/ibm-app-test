@@ -11,6 +11,7 @@ import com.example.international.business.men.repository.ExchangeRateRepositoryI
 import com.example.international.business.men.repository.TransactionRepository
 import com.example.international.business.men.repository.TransactionRepositoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
+import com.example.international.business.men.utils.ExchangeRateItemUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -32,4 +33,8 @@ val dataModule = module {
 
 val viewModelModule = module {
     viewModel { ProductTransactionViewModel(get()) }
+}
+
+val utilityModule = module {
+    single { ExchangeRateItemUtils() }
 }
