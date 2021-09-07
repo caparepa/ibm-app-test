@@ -24,7 +24,22 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
      */
     override fun getMissingCurrencyRates(currencyTo: String, list: List<ExchangeRateItem>): List<ExchangeRateItem> {
         var result: List<ExchangeRateItem> = arrayListOf<ExchangeRateItem>()
+        val modList = obtainMissingExchangePairs(list, currencyTo)
 
+        //calculate the missing (null) rates
+        result = calculateMissingExchangeRates(currencyTo, modList)
+
+        //return result
+        return result
+    }
+
+    /**
+     * Obtain missing exchange pairs
+     */
+    private fun obtainMissingExchangePairs(
+        list: List<ExchangeRateItem>,
+        currencyTo: String
+    ): MutableList<ExchangeRateItem> {
         //Convert to list to mutable list
         val modList = list.toMutableList()
 
@@ -41,18 +56,14 @@ class ExchangeRateRepositoryImpl() : ExchangeRateRepository, KoinComponent {
                 modList.add(ExchangeRateItem(from = item[0], to = item[1], rate = null))
             }
         }
-
-        //calculate the missing (null) rates
-        result = calculateRates(currencyTo, modList)
-
-        //return result
-        return result
+        return modList
     }
+
 
     /**
      * Calculate missing rates (functional)
      */
-    private fun calculateRates(
+    private fun calculateMissingExchangeRates(
         currencyCond: String,
         modList: MutableList<ExchangeRateItem>
     ): List<ExchangeRateItem> {
