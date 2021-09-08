@@ -9,6 +9,7 @@ import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.repository.ExchangeRateRepository
 import com.example.international.business.men.repository.TransactionRepository
 import com.example.international.business.men.utils.CURRENCY_EUR
+import com.example.international.business.men.utils.TransactionItemUtils
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -17,6 +18,7 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
 
     private val exchangeRateRepository: ExchangeRateRepository by inject()
     private val transactionRepository: TransactionRepository by inject()
+    private val transactionUtils: TransactionItemUtils by inject()
 
     val productList = MutableLiveData<List<TransactionItem>?>()
     val exchangeRateList = MutableLiveData<List<ExchangeRateItem>?>()
@@ -44,29 +46,28 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
     /**
      * On-the-fly data transform functions (called from the fragment observer)
      */
-
-    fun getProductList(list: List<TransactionItem>?) {
-        val result = transactionRepository.getUniqueSkuList(list)
-        productList.postValue(result)
-    }
-
-    fun getTransactionsBySku(sku: String, list: List<TransactionItem>?) {
-        val result = transactionRepository.getTransactionsBySku(sku, list)
-        transactionBySkuList.postValue(result)
-    }
-
     fun getMissingCurrencyRates(to: String, list: List<ExchangeRateItem>) {
         val result = exchangeRateRepository.getMissingCurrencyRates(to, list)
         filteredRateList.postValue(result)
     }
 
+    fun getProductList(list: List<TransactionItem>?) {
+        val result = transactionUtils.getUniqueSkuList(list)
+        productList.postValue(result)
+    }
+
+    fun getTransactionsBySku(sku: String, list: List<TransactionItem>?) {
+        val result = transactionUtils.getTransactionsBySku(sku, list)
+        transactionBySkuList.postValue(result)
+    }
+
     fun getTransactionSumInCurrency(rates: List<ExchangeRateItem>, list: List<TransactionItem>) {
-        val result = transactionRepository.getSkuTransactionsAmountSum(rates, list, CURRENCY_EUR)
+        val result = transactionUtils.getSkuTransactionsAmountSum(rates, list, CURRENCY_EUR)
         totalTransactionSumInCurrency.postValue(result)
     }
 
     fun getExtendedTransactionList(currency: String, rates: List<ExchangeRateItem>, list: List<TransactionItem>) {
-        val result = transactionRepository.getExtendedTransactionList(currency, rates, list)
+        val result = transactionUtils.getExtendedTransactionList(currency, rates, list)
         extendedTransactionList.postValue(result)
     }
 

@@ -12,6 +12,7 @@ import com.example.international.business.men.repository.TransactionRepository
 import com.example.international.business.men.repository.TransactionRepositoryImpl
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
 import com.example.international.business.men.utils.ExchangeRateItemUtils
+import com.example.international.business.men.utils.TransactionItemUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -37,4 +38,5 @@ val viewModelModule = module {
 
 val utilityModule = module {
     single { ExchangeRateItemUtils() }
+    single { TransactionItemUtils() }
 }
