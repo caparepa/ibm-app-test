@@ -9,11 +9,14 @@ import org.junit.Assert.*
 import org.junit.Before
 
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import org.mockito.junit.MockitoJUnitRunner
 import java.net.HttpURLConnection
 
+@RunWith(MockitoJUnitRunner::class)
 class TransactionRepositoryImplTest: BaseUTTest(), KoinTest {
 
     private lateinit var repo: TransactionRepository
