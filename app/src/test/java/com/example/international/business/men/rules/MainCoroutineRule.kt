@@ -10,17 +10,17 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()) :
-    TestWatcher(), TestCoroutineScope by TestCoroutineScope(dispatcher) {
+class MainCoroutineRule(val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()) :
+    TestWatcher(), TestCoroutineScope by TestCoroutineScope(testDispatcher) {
 
     override fun starting(description: Description?) {
         super.starting(description)
-        Dispatchers.setMain(dispatcher)
+        Dispatchers.setMain(testDispatcher)
     }
 
     override fun finished(description: Description?) {
         super.finished(description)
-        cleanupTestCoroutines()
+        testDispatcher.cleanupTestCoroutines()
         Dispatchers.resetMain()
     }
 

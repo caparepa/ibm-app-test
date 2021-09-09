@@ -84,34 +84,34 @@ class ProductTransactionViewModel(
      * Async functions
      */
     private suspend fun getTransactionListAsync() {
+        loadingState.postValue(true)
         val result = kotlin.runCatching {
-            showLoading()
             transactionRepository.getTransactionList()
         }
         with(result) {
             onSuccess {
-                dismissLoading()
+                loadingState.postValue(false)
                 transactionList.postValue(it)
             }
             onFailure {
-                dismissLoading()
+                loadingState.postValue(false)
                 onError.postValue(it.message)
             }
         }
     }
 
     private suspend fun getExchangeRateListAsync() {
+        loadingState.postValue(true)
         val result = kotlin.runCatching {
-            showLoading()
             exchangeRateRepository.getExchangeRates()
         }
         with(result) {
             onSuccess {
-                dismissLoading()
+                loadingState.postValue(false)
                 exchangeRateList.postValue(it)
             }
             onFailure {
-                dismissLoading()
+                loadingState.postValue(false)
                 onError.postValue(it.message)
             }
         }
