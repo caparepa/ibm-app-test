@@ -47,6 +47,9 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.force("junit:junit:4.13.2")
+}
 dependencies {
 
     val coroutinesVersion by extra("1.5.1")
@@ -80,15 +83,15 @@ dependencies {
 
     //Test dependencies
     testImplementation("junit:junit:4.13.2")
+    testImplementation("android.arch.core:core-testing:1.1.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("android.arch.core:core-testing:1.1.1")
 
     //mockito test
     testImplementation ("org.mockito:mockito-core:$mockitoVersion")
     testImplementation ("org.mockito:mockito-inline:$mockitoVersion")
     testImplementation ("com.linkedin.dexmaker:dexmaker-mockito:$mockitoDexVersion")
-
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     // Mock retrofit for test
     testImplementation("com.squareup.okhttp3:mockwebserver:$mockWebServerVersion")
     // coroutine test library
