@@ -10,11 +10,16 @@ import com.example.international.business.men.repository.ExchangeRateRepository
 import com.example.international.business.men.repository.TransactionRepository
 import com.example.international.business.men.utils.CURRENCY_EUR
 import com.example.international.business.men.utils.TransactionItemUtils
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinComponent {
+class ProductTransactionViewModel(
+    val context: Context,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : BaseViewModel(), KoinComponent {
 
     private val exchangeRateRepository: ExchangeRateRepository by inject()
     private val transactionRepository: TransactionRepository by inject()
@@ -32,13 +37,13 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
      * API Call functions
      */
     fun getTransactionList() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             getTransactionListAsync()
         }
     }
 
     fun getExchangeRateList() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             getExchangeRateListAsync()
         }
     }
@@ -66,7 +71,11 @@ class ProductTransactionViewModel(val context: Context) : BaseViewModel(), KoinC
         totalTransactionSumInCurrency.postValue(result)
     }
 
-    fun getExtendedTransactionList(currency: String, rates: List<ExchangeRateItem>, list: List<TransactionItem>) {
+    fun getExtendedTransactionList(
+        currency: String,
+        rates: List<ExchangeRateItem>,
+        list: List<TransactionItem>
+    ) {
         val result = transactionUtils.getExtendedTransactionList(currency, rates, list)
         extendedTransactionList.postValue(result)
     }

@@ -13,6 +13,8 @@ import com.example.international.business.men.repository.TransactionRepositoryIm
 import com.example.international.business.men.ui.viewmodel.ProductTransactionViewModel
 import com.example.international.business.men.utils.ExchangeRateItemUtils
 import com.example.international.business.men.utils.TransactionItemUtils
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -33,10 +35,14 @@ val dataModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { ProductTransactionViewModel(get()) }
+    viewModel { ProductTransactionViewModel(androidContext(), initIoDispatchers()) }
 }
 
 val utilityModule = module {
     single { ExchangeRateItemUtils() }
     single { TransactionItemUtils() }
+}
+
+private fun initIoDispatchers(): CoroutineDispatcher {
+    return Dispatchers.IO
 }

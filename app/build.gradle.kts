@@ -48,6 +48,9 @@ android {
 }
 
 dependencies {
+
+    val coroutinesVersion by extra("1.5.1")
+
     //Core dependencies
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("androidx.core:core-ktx:1.6.0")
@@ -56,8 +59,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
 
     //coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 
     //livedat / lifecycle
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
