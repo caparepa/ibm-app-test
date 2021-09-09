@@ -45,19 +45,21 @@ class ProductTransactionViewModelTest: BaseUTTest(), KoinTest {
         val transactionItemMock = mock(TransactionItem::class.java)
         val transactionRepositoryMock = mock(TransactionRepositoryImpl::class.java)
 
+        //instantiate the viewmodel
+        val productTransactionViewModel = ProductTransactionViewModel(contextMock, mainCoroutineRule.testDispatcher)
+
+        //Make a call to the repository and instantiate an list of mock transaction items
         `when`(transactionRepositoryMock.getTransactionList()).thenReturn(
             arrayListOf(transactionItemMock)
         )
 
-        val productTransactionViewModel = ProductTransactionViewModel(contextMock, mainCoroutineRule.testDispatcher)
-
         //THEN
-
-        //Pause dispatcher so initial values can be verified
-        mainCoroutineRule.pauseDispatcher()
 
         //Load task in the viewmodel
         productTransactionViewModel.getTransactionList()
+
+        //Pause dispatcher so initial values can be verified
+        mainCoroutineRule.pauseDispatcher()
 
         //Assert the loading indicator is shown
         productTransactionViewModel.loadingState.postValue(true)
