@@ -11,7 +11,7 @@ class ExchangeRateItemUtils {
         currencyTo: String
     ): MutableList<ExchangeRateItem> {
         //Convert to list to mutable list
-        val modList = list.toMutableList()
+        var modList = list.toMutableList()
 
         //obtain a set with all currency signs
         val currencySet = list.getCurrencySet()
@@ -20,15 +20,25 @@ class ExchangeRateItemUtils {
         val permutations = currencySet.permutations()
 
         //add the missing rate permutations with null rate to the mutable list
+        modList = buildRatesList(permutations, currencyTo)
+
+        return modList
+    }
+
+    fun buildRatesList(
+        permutations: Sequence<List<String>>,
+        currencyTo: String
+    ): MutableList<ExchangeRateItem> {
+        val modList = mutableListOf<ExchangeRateItem>()
         permutations.forEach { item ->
             val r = modList.firstOrNull() { elem -> elem.from == item[0] && elem.to == item[1] }
             if (r == null && item[1] == currencyTo) {
                 modList.add(ExchangeRateItem(from = item[0], to = item[1], rate = null))
             }
         }
+
         return modList
     }
-
 
     /**
      * Calculate missing rates (functional)
