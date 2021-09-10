@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken
 import org.junit.Assert.*
 import org.junit.Before
 
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
