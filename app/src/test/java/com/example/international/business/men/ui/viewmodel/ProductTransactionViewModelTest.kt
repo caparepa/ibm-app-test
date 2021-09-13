@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.international.business.men.base.BaseUTTest
 import com.example.international.business.men.base.getOrAwaitValue
+import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.data.model.TransactionItem
 import com.example.international.business.men.di.configureAppTestModules
+import com.example.international.business.men.repository.ExchangeRateRepositoryImpl
 import com.example.international.business.men.repository.TransactionRepositoryImpl
 import com.example.international.business.men.rules.MainCoroutineRule
 import com.nhaarman.mockitokotlin2.whenever
@@ -81,7 +83,40 @@ class ProductTransactionViewModelTest: BaseUTTest(), KoinTest {
     }
 
     @Test
-    fun getExchangeRateList() {
+    fun getExchangeRateList() = mainCoroutineRule.runBlockingTest {
+        //GIVEN
+        val contextMock = mock(Context::class.java)
+        val exchangeRateItemMock = mock(ExchangeRateItem::class.java)
+        val exchangeRateRepositoryMock = mock(ExchangeRateRepositoryImpl::class.java)
+
+        //instantiate the viewmodel
+        val productTransactionViewModel = ProductTransactionViewModel(contextMock, mainCoroutineRule.testDispatcher)
+
+        //Make a call to the repository and instantiate an list of mock exchange items
+        `when`(exchangeRateRepositoryMock.getExchangeRates()).thenReturn(
+            arrayListOf(exchangeRateItemMock)
+        )
+
+        //THEN
+
+        //Load task in the viewmodel
+        productTransactionViewModel.getExchangeRateList()
+
+        //Pause dispatcher so initial values can be verified
+        mainCoroutineRule.pauseDispatcher()
+
+        //Assert the loading indicator is shown
+        productTransactionViewModel.loadingState.postValue(true)
+        assertThat(productTransactionViewModel.loadingState.getOrAwaitValue(), `is`(true))
+
+        // Execute pending coroutines actions.
+        mainCoroutineRule.resumeDispatcher()
+
+        //then the data is post valued
+        productTransactionViewModel.exchangeRateList.postValue(arrayListOf(exchangeRateItemMock))
+
+        //Assert that the result from this method is a list of transactions
+        assertThat(productTransactionViewModel.exchangeRateList.getOrAwaitValue(), `is`(arrayListOf(exchangeRateItemMock)))
     }
 
     @Test
