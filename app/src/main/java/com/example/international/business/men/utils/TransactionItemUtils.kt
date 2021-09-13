@@ -28,7 +28,7 @@ class TransactionItemUtils {
             } else {
                 val rateItem = rates.firstOrNull { it.from == item.currency }
                 rateItem?.let {
-                    val rate = rateItem.rate!!.toDouble()
+                    rate = rateItem.rate!!.toDouble()
                 }
                 (item.amount!!.toDouble() * rate).roundToHalfEven()
             }
