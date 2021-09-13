@@ -3,10 +3,11 @@ package com.example.international.business.men.utils
 import com.example.international.business.men.base.BaseUTTest
 import com.example.international.business.men.data.model.ExchangeRateItem
 import com.example.international.business.men.di.configureAppTestModules
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import com.google.gson.reflect.TypeToken
 import org.junit.Assert.*
 import org.junit.Before
-
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.test.KoinTest
@@ -63,5 +64,8 @@ class ExchangeRateItemUtilsTest : BaseUTTest(), KoinTest {
         val rates: List<ExchangeRateItem> =
             parseArray(ratesJson, object : TypeToken<List<ExchangeRateItem>>() {}.type)
         assertNotNull(rates)
+
+        val modList = exchangeRateUtils.calculateMissingExchangeRates(currency, rates.toMutableList())
+        assertNotNull(modList)
     }
 }
